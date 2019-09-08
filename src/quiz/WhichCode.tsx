@@ -8,11 +8,11 @@ interface WhichCodeProps {
     onAnswer: () => void;
 }
 
-interface WitchCodeState {
+interface WhichCodeState {
     choosen?: Color;
 }
 
-export default class WhichCode extends React.Component<WhichCodeProps, WitchCodeState> {
+export default class WhichCode extends React.Component<WhichCodeProps, WhichCodeState> {
 
     public constructor(props: WhichCodeProps) {
         super(props);
