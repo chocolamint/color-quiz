@@ -5,7 +5,7 @@ import { blackOrWhite } from '../Utils';
 interface WhichCodeProps {
     choices: Color[];
     answer: Color;
-    onAnswer: (correct: boolean) => void;
+    onQuizEnd: (correct: boolean) => void;
 }
 
 interface WhichCodeState {
@@ -35,7 +35,7 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
                 <br />
-                <button onClick={() => this.endQuiz()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
+                <button onClick={() => this.handleNextQuizButton()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
                     次のクイズへ
                 </button>
             </div>);
@@ -83,11 +83,11 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
         })
     }
 
-    private endQuiz() {
+    private handleNextQuizButton() {
         const correct = this.isCollect;
         this.setState({
             choosen: undefined
         });
-        this.props.onAnswer(correct);
+        this.props.onQuizEnd(correct);
     }
 }

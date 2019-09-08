@@ -40,9 +40,9 @@ export default class App extends React.Component<{}, AppState> {
           {(() => {
             switch (this.state.questionType) {
               case 0:
-                return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={e => this.handleAnswer(e)} />
+                return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onQuizEnd={e => this.handleQuizEnd(e)} />
               case 1:
-                return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={e => this.handleAnswer(e)} />
+                return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onQuizEnd={e => this.handleQuizEnd(e)} />
             }
           })()}
         </main>
@@ -72,7 +72,7 @@ export default class App extends React.Component<{}, AppState> {
     });
   }
 
-  private handleAnswer(correct: boolean) {
+  private handleQuizEnd(correct: boolean) {
     this.resetQuiz(correct);
   }
 }

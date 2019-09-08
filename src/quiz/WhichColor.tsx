@@ -5,7 +5,7 @@ import { blackOrWhite } from '../Utils';
 interface WhichColorProps {
     choices: Color[];
     answer: Color;
-    onAnswer: (correct: boolean) => void;
+    onQuizEnd: (correct: boolean) => void;
 }
 
 interface WhichColorState {
@@ -36,7 +36,7 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
                 <br />
-                <button onClick={() => this.endQuiz()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
+                <button onClick={() => this.handleNextQuizButton()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
                     次のクイズへ
                 </button>
             </div>);
@@ -59,7 +59,7 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
                                         className="choice-button"
                                         style={{ background: color.color, color: blackOrWhite(color.color) }}
                                         disabled={this.state.choosen != null}
-                                        onClick={() => { this.onClickHandle(color); }}
+                                        onClick={() => { this.handleChooseButtonClick(color); }}
                                     >
                                         {buttonText}
                                     </button>
@@ -76,17 +76,17 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
         return this.state.choosen != null && this.state.choosen.code === this.props.answer.code;
     }
 
-    private onClickHandle(color: Color) {
+    private handleChooseButtonClick(color: Color) {
         this.setState({
             choosen: color
         })
     }
 
-    private endQuiz() {
+    private handleNextQuizButton() {
         const correct = this.isCollect;
         this.setState({
             choosen: undefined
         });
-        this.props.onAnswer(correct);
+        this.props.onQuizEnd(correct);
     }
 }
