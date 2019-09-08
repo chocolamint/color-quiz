@@ -34,35 +34,37 @@ export default class WhichCode extends React.Component<WhichCodeProps, WitchCode
                         `正解！` :
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
-                <button onClick={() => this.endGame()}>
+                <br />
+                <button onClick={() => this.endGame()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
                     次のゲームへ
                 </button>
             </div>);
 
         return (
-            <div className="which-code" style={{ display: "flex", flexDirection: "column" }}>
-                <div className="color" style={{ backgroundColor: this.props.answer.color, width: '100%', height: '50vh' }}>
+            <div className="which-code" style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}>
+                <div className="color" style={{ flexGrow: 1, flexShrink: 1, backgroundColor: this.props.answer.color, width: '100%', height: "30%" }}>
 
                 </div>
-                <div>
-                    <div style={{ height: "2em", lineHeight: "2em", verticalAlign: "middle" }}>
+                <div style={{ flexGrow: 1, flexShrink: 1 }}>
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", height: "4em", verticalAlign: "middle", fontSize: 18 }}>
                         {message}
                     </div>
-                    <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
+                    <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", padding: "0 5vw" }}>
                         {this.props.choices.map(color => {
 
                             const buttonBackground = this.state.choosen == null ? "#ffffff" : color.color;
-                            const buttonStyle = {
+                            const buttonStyle: React.CSSProperties = {
                                 width: "100%",
                                 height: "100%",
                                 background: buttonBackground,
                                 color: blackOrWhite(buttonBackground),
                                 border: "solid 1px #999999",
+                                fontSize: 20,
                                 borderRadius: 4
                             };
 
                             return (
-                                <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "0.5vh 0.5vw" }}>
+                                <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "1vh 0" }}>
                                     <button
                                         className="choice"
                                         key={color.code}
