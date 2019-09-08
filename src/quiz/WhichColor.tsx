@@ -54,7 +54,7 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
             </div>);
 
         return (
-            <div className="which-code" style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}>
+            <div className="which-color" style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}>
                 <div className="color" style={questionStyle}>
                     {this.props.answer.code}
                 </div>

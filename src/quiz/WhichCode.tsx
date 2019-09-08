@@ -45,30 +45,21 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
                 <div className="color" style={{ backgroundColor: this.props.answer.color }}>
 
                 </div>
-                <div style={{ flexGrow: 1, flexShrink: 1 }}>
-                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", height: "4em", verticalAlign: "middle", fontSize: 18 }}>
+                <div className="q-and-a">
+                    <div className="question">
                         {message}
                     </div>
-                    <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", padding: "0 5vw" }}>
+                    <div className="choices">
                         {this.props.choices.map(color => {
 
                             const buttonBackground = this.state.choosen == null ? "#ffffff" : color.color;
-                            const buttonStyle: React.CSSProperties = {
-                                width: "100%",
-                                height: "100%",
-                                background: buttonBackground,
-                                color: blackOrWhite(buttonBackground),
-                                border: "solid 1px #999999",
-                                fontSize: 20,
-                                borderRadius: 4
-                            };
 
                             return (
-                                <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "1vh 0" }}>
+                                <div className="choice">
                                     <button
-                                        className="choice"
+                                        className="choice-button"
                                         key={color.code}
-                                        style={buttonStyle}
+                                        style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}
                                         disabled={this.state.choosen != null}
                                         onClick={() => { this.onClickHandle(color); }}
                                     >
