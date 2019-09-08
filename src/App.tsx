@@ -6,7 +6,9 @@ import { Random, shuffle } from './Utils';
 import { colors, Color } from './quiz/colors';
 
 interface AppState {
-  questionType: number,
+  questionType: number;
+  questionCount: number;
+  correctCount: number;
   fourColors: {
     choices: Color[];
     answer: Color;
@@ -20,25 +22,35 @@ export default class App extends React.Component<{}, AppState> {
   public constructor(props: {}) {
     super(props);
 
-    this.state = this.generateNewState();
+    const question = this.generateNewQuestion();
+    this.state = {
+      ...question,
+      questionCount: 0,
+      correctCount: 0
+    };
   }
 
   public render() {
     return (
       <div className="App">
-        {(() => {
-          switch (this.state.questionType) {
-            case 0:
-              return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={() => this.handleAnswer()} />
-            case 1:
-              return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={() => this.handleAnswer()} />
-          }
-        })()}
+        <header className="header">
+          {this.state.questionCount} 問中 {this.state.correctCount} 問正解
+        </header>
+        <main className="main">
+          {(() => {
+            switch (this.state.questionType) {
+              case 0:
+                return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={e => this.handleAnswer(e)} />
+              case 1:
+                return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={e => this.handleAnswer(e)} />
+            }
+          })()}
+        </main>
       </div>
     );
   }
 
-  private generateNewState() {
+  private generateNewQuestion() {
     const questionType = this.random.nextInt(2);
     const choices = shuffle(colors, this.random).slice(0, 4);
     const answer = choices[this.random.nextInt(choices.length)];
@@ -51,13 +63,17 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
-  private resetGame() {
-    const state = this.generateNewState();
-    this.setState(state);
+  private resetGame(correct: boolean) {
+    const question = this.generateNewQuestion();
+    this.setState({
+      ...question,
+      questionCount: this.state.questionCount + 1,
+      correctCount: this.state.correctCount + (correct ? 1 : 0)
+    });
   }
 
-  private handleAnswer() {
-    this.resetGame();
+  private handleAnswer(correct: boolean) {
+    this.resetGame(correct);
   }
 }
 

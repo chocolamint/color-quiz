@@ -5,7 +5,7 @@ import { blackOrWhite } from '../Utils';
 interface WhichCodeProps {
     choices: Color[];
     answer: Color;
-    onAnswer: () => void;
+    onAnswer: (correct: boolean) => void;
 }
 
 interface WhichCodeState {
@@ -30,7 +30,7 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
             </div>) :
             (<div className="answer">
                 <span>
-                    {(this.state.choosen!.code === this.props.answer.code) ?
+                    {this.isCollect ?
                         `正解！` :
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
@@ -55,10 +55,9 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
                             const buttonBackground = this.state.choosen == null ? "#ffffff" : color.color;
 
                             return (
-                                <div className="choice">
+                                <div key={color.code} className="choice">
                                     <button
                                         className="choice-button"
-                                        key={color.code}
                                         style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}
                                         disabled={this.state.choosen != null}
                                         onClick={() => { this.onClickHandle(color); }}
@@ -74,6 +73,10 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
         );
     }
 
+    private get isCollect() {
+        return this.state.choosen != null && this.state.choosen.code === this.props.answer.code;
+    }
+
     private onClickHandle(color: Color) {
         this.setState({
             choosen: color
@@ -81,9 +84,10 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
     }
 
     private endGame() {
+        const correct = this.isCollect;
         this.setState({
             choosen: undefined
         });
-        this.props.onAnswer();
+        this.props.onAnswer(correct);
     }
 }
