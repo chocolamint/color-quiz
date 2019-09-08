@@ -2,19 +2,19 @@ import React from 'react';
 import { Color } from './colors';
 import { blackOrWhite } from '../Utils';
 
-interface WhichCodeProps {
+interface WhichColorProps {
     choices: Color[];
     answer: Color;
     onAnswer: () => void;
 }
 
-interface WhichCodeState {
+interface WhichColorState {
     choosen?: Color;
 }
 
-export default class WhichCode extends React.Component<WhichCodeProps, WhichCodeState> {
+export default class WhichColor extends React.Component<WhichColorProps, WhichColorState> {
 
-    public constructor(props: WhichCodeProps) {
+    public constructor(props: WhichColorProps) {
         super(props);
 
         this.state = {
@@ -24,9 +24,22 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
 
     public render() {
 
+        const questionBackground = this.state.choosen == null ? "#ffffff" : this.props.answer.color;
+        const questionStyle = {
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            flexGrow: 1,
+            flexShrink: 1,
+            color: blackOrWhite(questionBackground),
+            backgroundColor: questionBackground,
+            fontSize: 30,
+            width: '100%',
+            height: "30%"
+        };
         const message = this.state.choosen == null ?
             (<div className="question">
-                この色はどれ？
+                このコードはどの色？
             </div>) :
             (<div className="answer">
                 <span>
@@ -42,8 +55,8 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
 
         return (
             <div className="which-code" style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}>
-                <div className="color" style={{ flexGrow: 1, flexShrink: 1, backgroundColor: this.props.answer.color, width: '100%', height: "30%" }}>
-
+                <div className="color" style={questionStyle}>
+                    {this.props.answer.code}
                 </div>
                 <div style={{ flexGrow: 1, flexShrink: 1 }}>
                     <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", height: "4em", verticalAlign: "middle", fontSize: 18 }}>
@@ -52,27 +65,26 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
                     <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", padding: "0 5vw" }}>
                         {this.props.choices.map(color => {
 
-                            const buttonBackground = this.state.choosen == null ? "#ffffff" : color.color;
+                            const buttonText = this.state.choosen == null ? "" : color.code;
                             const buttonStyle: React.CSSProperties = {
                                 width: "100%",
                                 height: "100%",
-                                background: buttonBackground,
-                                color: blackOrWhite(buttonBackground),
+                                background: color.color,
+                                color: blackOrWhite(color.color),
                                 border: "solid 1px #999999",
                                 fontSize: 20,
                                 borderRadius: 4
                             };
 
                             return (
-                                <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "1vh 0" }}>
+                                <div key={color.code} style={{ display: "flex", width: "40vw", height: "20vh", padding: "1vh 0" }}>
                                     <button
                                         className="choice"
-                                        key={color.code}
                                         style={buttonStyle}
                                         disabled={this.state.choosen != null}
                                         onClick={() => { this.onClickHandle(color); }}
                                     >
-                                        {color.code}
+                                        {buttonText}
                                     </button>
                                 </div>
                             );
