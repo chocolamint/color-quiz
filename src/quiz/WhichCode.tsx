@@ -48,18 +48,21 @@ export default class WhichCode extends React.Component<WhichCodeProps, WitchCode
                         {message}
                     </div>
                     <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
-                        {this.props.choices.map(color => (
-                            <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "0.5vh 0.5vw" }}>
-                                <button
-                                    className="choice"
-                                    key={color.code}
-                                    style={{ width: "100%", height: "100%", background: "#ffffff", border: "solid 1px #999999", borderRadius: 4 }}
-                                    onClick={() => { this.onClickHandle(color); }}
-                                >
-                                    {color.code}
-                                </button>
-                            </div>
-                        ))}
+                        {this.props.choices.map(color => {
+                            const buttonBackground = this.state.choosen == null ? "#ffffff" : color.color;
+                            return (
+                                <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "0.5vh 0.5vw" }}>
+                                    <button
+                                        className="choice"
+                                        key={color.code}
+                                        style={{ width: "100%", height: "100%", background: buttonBackground, border: "solid 1px #999999", borderRadius: 4 }}
+                                        onClick={() => { this.onClickHandle(color); }}
+                                    >
+                                        {color.code}
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
