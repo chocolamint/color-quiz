@@ -28,13 +28,22 @@
         flex-grow: 1;
         flex-shrink: 1;
 
-        .question {
+        .message {
             display: flex;
             flex-direction: column;
             justify-content: space-around;
             height: 4em;
             vertical-align: middle;
             font-size: 18px;
+
+            .answer {
+                .next-quiz-button {
+                    background: #ffffff;
+                    border: none;
+                    color: #6666cc;
+                    font-size: 18px;
+                }
+            }
         }
 
         .choices {

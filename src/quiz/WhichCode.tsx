@@ -35,7 +35,7 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
                 <br />
-                <button onClick={() => this.handleNextQuizButton()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
+                <button className="next-quiz-button" onClick={() => this.handleNextQuizButton()}>
                     次のクイズへ
                 </button>
             </div>);
@@ -46,7 +46,7 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
 
                 </div>
                 <div className="q-and-a">
-                    <div className="question">
+                    <div className="message">
                         {message}
                     </div>
                     <div className="choices">
