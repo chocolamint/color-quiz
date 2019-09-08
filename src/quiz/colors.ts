@@ -1,4 +1,4 @@
-const colors = [
+export const colors = [
 
     // v
     { code: "v2", color: "#cd1f42" },
@@ -205,4 +205,7 @@ const colors = [
     { code: "B", color: "#292929" },
 ];
 
-export default colors;
+export interface Color {
+    code: string,
+    color: string
+}

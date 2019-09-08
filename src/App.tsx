@@ -1,10 +1,14 @@
 import React from 'react';
 import './App.css';
 import WhichCode from './quiz/WhichCode';
-import { Random } from './Utils';
+import { Random, shuffle } from './Utils';
+import { colors, Color } from './quiz/colors';
 
 interface AppState {
-  random: Random
+  whichCode: {
+    choices: Color[];
+    answer: Color;
+  }
 }
 
 export default class App extends React.Component<{}, AppState> {
@@ -13,26 +17,34 @@ export default class App extends React.Component<{}, AppState> {
     super(props);
 
     this.state = {
-      random: new Random()
+      whichCode: this.generateState()
     };
   }
 
   public render() {
     return (
       <div className="App">
-        <WhichCode random={this.state.random} onAnswer={(e) => this.handleAnswer(e)} />
+        <WhichCode choices={this.state.whichCode.choices} answer={this.state.whichCode.answer} onAnswer={() => this.handleAnswer()} />
       </div>
     );
   }
 
-  private handleAnswer(collect: boolean) {
-    alert(collect ? "正解！" : "残念...");
-    this.restartGame();
+  private generateState() {
+    const random = new Random();
+    const choices = shuffle(colors, random).slice(0, 4);
+    const answer = choices[random.nextInt(choices.length)];
+    return { choices, answer };
   }
 
-  private restartGame() {
-    const random = new Random();
-    this.setState({ random });
+  private resetGame() {
+    const state = this.generateState();
+    this.setState({
+      whichCode: state
+    });
+  }
+
+  private handleAnswer() {
+    this.resetGame();
   }
 }
 
