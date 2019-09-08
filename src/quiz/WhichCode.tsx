@@ -2,11 +2,16 @@ import React from 'react';
 import colors from './colors';
 import { RandomGenerator, random, shuffle } from '../Utils';
 
-export default function WhichCode(props: { randomGenerator: RandomGenerator }) {
+interface WhichCodeProps {
+    randomGenerator: RandomGenerator;
+    onAnswer: (collect: boolean) => void;
+}
+
+export default function WhichCode(props: WhichCodeProps) {
 
     const choices = shuffle(colors, props.randomGenerator).slice(0, 4);
 
-    const answer = colors[random(choices.length, props.randomGenerator)];
+    const answer = choices[random(choices.length, props.randomGenerator)];
 
     return (
         <div className="which-code">
@@ -18,7 +23,13 @@ export default function WhichCode(props: { randomGenerator: RandomGenerator }) {
                     この色はどれ？
                 </p>
                 {choices.map(color => (
-                    <button key={color.code}>{color.code}</button>
+                    <button
+                        className="choice"
+                        key={color.code}
+                        onClick={() => { props.onAnswer(answer.code == color.code); }}
+                    >
+                        {color.code}
+                    </button>
                 ))}
             </div>
         </div>
