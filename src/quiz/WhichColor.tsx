@@ -5,7 +5,7 @@ import { blackOrWhite } from '../Utils';
 interface WhichColorProps {
     choices: Color[];
     answer: Color;
-    onAnswer: () => void;
+    onAnswer: (correct: boolean) => void;
 }
 
 interface WhichColorState {
@@ -31,7 +31,7 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
             </div>) :
             (<div className="answer">
                 <span>
-                    {(this.state.choosen!.code === this.props.answer.code) ?
+                    {this.isCollect ?
                         `正解！` :
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
@@ -72,6 +72,10 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
         );
     }
 
+    private get isCollect() {
+        return this.state.choosen != null && this.state.choosen.code === this.props.answer.code;
+    }
+
     private onClickHandle(color: Color) {
         this.setState({
             choosen: color
@@ -79,9 +83,10 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
     }
 
     private endGame() {
+        const correct = this.isCollect;
         this.setState({
             choosen: undefined
         });
-        this.props.onAnswer();
+        this.props.onAnswer(correct);
     }
 }
