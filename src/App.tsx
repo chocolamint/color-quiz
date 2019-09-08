@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import WhichCode from './quiz/WhichCode';
+import WhichColor from './quiz/WhichColor';
 import { Random, shuffle } from './Utils';
 import { colors, Color } from './quiz/colors';
 
@@ -24,7 +25,10 @@ export default class App extends React.Component<{}, AppState> {
   public render() {
     return (
       <div className="App">
-        <WhichCode choices={this.state.whichCode.choices} answer={this.state.whichCode.answer} onAnswer={() => this.handleAnswer()} />
+        {
+          //<WhichCode choices={this.state.whichCode.choices} answer={this.state.whichCode.answer} onAnswer={() => this.handleAnswer()} />
+          <WhichColor choices={this.state.whichCode.choices} answer={this.state.whichCode.answer} onAnswer={() => this.handleAnswer()} />
+        }
       </div>
     );
   }
