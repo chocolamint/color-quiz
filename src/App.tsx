@@ -1,15 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import WhichCode from './quiz/WhichCode';
+
+const random = Math.random;
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
+      <WhichCode random={random()} />
     </div>
   );
 }
