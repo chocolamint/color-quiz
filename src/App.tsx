@@ -16,6 +16,7 @@ export default class App extends React.Component<{}, AppState> {
       random: new Random()
     };
   }
+
   public render() {
     return (
       <div className="App">
@@ -26,6 +27,12 @@ export default class App extends React.Component<{}, AppState> {
 
   private handleAnswer(collect: boolean) {
     alert(collect ? "正解！" : "残念...");
+    this.restartGame();
+  }
+
+  private restartGame() {
+    const random = new Random();
+    this.setState({ random });
   }
 }
 
