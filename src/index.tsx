@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import './quiz/WhichCode.css';
+import './index.scss';
+import './quiz/WhichCode.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

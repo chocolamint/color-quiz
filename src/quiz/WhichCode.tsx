@@ -41,8 +41,8 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
             </div>);
 
         return (
-            <div className="which-code" style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}>
-                <div className="color" style={{ flexGrow: 1, flexShrink: 1, backgroundColor: this.props.answer.color, width: '100%', height: "30%" }}>
+            <div className="which-code">
+                <div className="color" style={{ backgroundColor: this.props.answer.color }}>
 
                 </div>
                 <div style={{ flexGrow: 1, flexShrink: 1 }}>
