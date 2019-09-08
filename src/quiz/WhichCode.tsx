@@ -69,6 +69,7 @@ export default class WhichCode extends React.Component<WhichCodeProps, WitchCode
                                         className="choice"
                                         key={color.code}
                                         style={buttonStyle}
+                                        disabled={this.state.choosen != null}
                                         onClick={() => { this.onClickHandle(color); }}
                                     >
                                         {color.code}
