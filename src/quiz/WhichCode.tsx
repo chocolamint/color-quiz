@@ -23,9 +23,11 @@ export default class WhichCode extends React.Component<WhichCodeProps, WitchCode
 
     public render() {
 
-        const chooseResult = this.state.choosen == null ?
-            <div></div> :
-            (<div className="answer" style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0, background: "pink" }}>
+        const message = this.state.choosen == null ?
+            (<div className="question">
+                この色はどれ？
+            </div>) :
+            (<div className="answer">
                 <span>
                     {(this.state.choosen!.code === this.props.answer.code) ?
                         `正解！` :
@@ -37,25 +39,29 @@ export default class WhichCode extends React.Component<WhichCodeProps, WitchCode
             </div>);
 
         return (
-            <div className="which-code" >
+            <div className="which-code" style={{ display: "flex", flexDirection: "column" }}>
                 <div className="color" style={{ backgroundColor: this.props.answer.color, width: '100%', height: '50vh' }}>
 
                 </div>
                 <div>
-                    <p>
-                        この色はどれ？
-                </p>
-                    {this.props.choices.map(color => (
-                        <button
-                            className="choice"
-                            key={color.code}
-                            onClick={() => { this.onClickHandle(color); }}
-                        >
-                            {color.code}
-                        </button>
-                    ))}
+                    <div style={{ height: "2em", lineHeight: "2em", verticalAlign: "middle" }}>
+                        {message}
+                    </div>
+                    <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
+                        {this.props.choices.map(color => (
+                            <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "0.5vh 0.5vw" }}>
+                                <button
+                                    className="choice"
+                                    key={color.code}
+                                    style={{ width: "100%", height: "100%", background: "#ffffff", border: "solid 1px #999999", borderRadius: 4 }}
+                                    onClick={() => { this.onClickHandle(color); }}
+                                >
+                                    {color.code}
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                {chooseResult}
             </div>
         );
     }
