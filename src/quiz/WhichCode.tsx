@@ -1,17 +1,17 @@
 import React from 'react';
 import colors from './colors';
-import { RandomGenerator, random, shuffle } from '../Utils';
+import { shuffle, Random } from '../Utils';
 
 interface WhichCodeProps {
-    randomGenerator: RandomGenerator;
+    random: Random;
     onAnswer: (collect: boolean) => void;
 }
 
 export default function WhichCode(props: WhichCodeProps) {
 
-    const choices = shuffle(colors, props.randomGenerator).slice(0, 4);
+    const choices = shuffle(colors, props.random).slice(0, 4);
 
-    const answer = choices[random(choices.length, props.randomGenerator)];
+    const answer = choices[props.random.nextInt(choices.length)];
 
     return (
         <div className="which-code">

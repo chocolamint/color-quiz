@@ -3,6 +3,7 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import WhichCode from './WhichCode';
 import { act } from "react-dom/test-utils";
 import { mockRandom } from '../TestHelper';
+import { Random } from '../Utils';
 
 describe("WhichCode.tsx", () => {
 
@@ -20,21 +21,19 @@ describe("WhichCode.tsx", () => {
 
     describe('some random cases', () => {
 
-        const cases: [1 | 2, string][] = [
-            [1, "rgb(0, 178, 117)"],
-            [2, "rgb(217, 149, 172)"]
+        const cases: [number, string][] = [
+            [1, "rgb(0, 126, 119)"],
+            [2, "rgb(112, 75, 26)"]
         ];
 
-        for (const [pattern, color] of cases) {
+        for (const [seed, color] of cases) {
 
             it('renders color randomly', () => {
 
-                const random = mockRandom(pattern);
-                ReactDOM.render(<WhichCode randomGenerator={random} onAnswer={() => { }} />, container);
+                ReactDOM.render(<WhichCode random={new Random(seed)} onAnswer={() => { }} />, container);
                 const containerDiv = container as HTMLDivElement;
                 const colorDiv = containerDiv.querySelector(".which-code .color") as (HTMLElement | null);
 
-                expect(random).toHaveBeenCalled();
                 expect(colorDiv).toBeTruthy();
                 expect(colorDiv!.style.background).toBe(color);
             });
@@ -54,13 +53,11 @@ describe("WhichCode.tsx", () => {
 
             it('raises with boolean value', () => {
 
-                const random = mockRandom();
-                const onAnswer = jest.fn(x => console.log(`${choice[0]}: ${x}`));
+                const onAnswer = jest.fn();
 
-                ReactDOM.render(<WhichCode randomGenerator={random} onAnswer={onAnswer} />, container);
+                ReactDOM.render(<WhichCode random={new Random(1)} onAnswer={onAnswer} />, container);
                 const buttons = (container as HTMLDivElement).querySelectorAll("button.choice");
 
-                expect(random).toHaveBeenCalled();
                 act(() => {
                     buttons[choice[0]].dispatchEvent(new MouseEvent("click", { bubbles: true }));
                 });
