@@ -6,8 +6,8 @@ import { Random, shuffle } from './Utils';
 import { colors, Color } from './quiz/colors';
 
 interface AppState {
-  questionType: number;
-  questionCount: number;
+  quizType: number;
+  quizCount: number;
   correctCount: number;
   fourColors: {
     choices: Color[];
@@ -22,10 +22,10 @@ export default class App extends React.Component<{}, AppState> {
   public constructor(props: {}) {
     super(props);
 
-    const question = this.generateNewQuestion();
+    const quiz = this.generateNewQuiz();
     this.state = {
-      ...question,
-      questionCount: 0,
+      ...quiz,
+      quizCount: 0,
       correctCount: 0
     };
   }
@@ -34,11 +34,11 @@ export default class App extends React.Component<{}, AppState> {
     return (
       <div className="App">
         <header className="header">
-          {this.state.questionCount} 問中 {this.state.correctCount} 問正解
+          {this.state.quizCount} 問中 {this.state.correctCount} 問正解
         </header>
         <main className="main">
           {(() => {
-            switch (this.state.questionType) {
+            switch (this.state.quizType) {
               case 0:
                 return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onQuizEnd={e => this.handleQuizEnd(e)} />
               case 1:
@@ -50,12 +50,12 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 
-  private generateNewQuestion() {
-    const questionType = this.random.nextInt(2);
+  private generateNewQuiz() {
+    const quizType = this.random.nextInt(2);
     const choices = shuffle(colors, this.random).slice(0, 4);
     const answer = choices[this.random.nextInt(choices.length)];
     return {
-      questionType,
+      quizType,
       fourColors: {
         choices,
         answer
@@ -63,17 +63,17 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
-  private resetQuiz(correct: boolean) {
-    const question = this.generateNewQuestion();
+  private nextQuiz(correct: boolean) {
+    const quiz = this.generateNewQuiz();
     this.setState({
-      ...question,
-      questionCount: this.state.questionCount + 1,
+      ...quiz,
+      quizCount: this.state.quizCount + 1,
       correctCount: this.state.correctCount + (correct ? 1 : 0)
     });
   }
 
   private handleQuizEnd(correct: boolean) {
-    this.resetQuiz(correct);
+    this.nextQuiz(correct);
   }
 }
 
