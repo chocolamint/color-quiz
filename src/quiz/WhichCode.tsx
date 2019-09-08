@@ -1,5 +1,6 @@
 import React from 'react';
 import { Color } from './colors';
+import { blackOrWhite } from '../Utils';
 
 interface WhichCodeProps {
     choices: Color[];
@@ -49,13 +50,23 @@ export default class WhichCode extends React.Component<WhichCodeProps, WitchCode
                     </div>
                     <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
                         {this.props.choices.map(color => {
+
                             const buttonBackground = this.state.choosen == null ? "#ffffff" : color.color;
+                            const buttonStyle = {
+                                width: "100%",
+                                height: "100%",
+                                background: buttonBackground,
+                                color: blackOrWhite(buttonBackground),
+                                border: "solid 1px #999999",
+                                borderRadius: 4
+                            };
+
                             return (
                                 <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "0.5vh 0.5vw" }}>
                                     <button
                                         className="choice"
                                         key={color.code}
-                                        style={{ width: "100%", height: "100%", background: buttonBackground, border: "solid 1px #999999", borderRadius: 4 }}
+                                        style={buttonStyle}
                                         onClick={() => { this.onClickHandle(color); }}
                                     >
                                         {color.code}
