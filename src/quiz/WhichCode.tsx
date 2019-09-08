@@ -35,8 +35,8 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
                 <br />
-                <button onClick={() => this.endGame()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
-                    次のゲームへ
+                <button onClick={() => this.endQuiz()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
+                    次のクイズへ
                 </button>
             </div>);
 
@@ -83,7 +83,7 @@ export default class WhichCode extends React.Component<WhichCodeProps, WhichCode
         })
     }
 
-    private endGame() {
+    private endQuiz() {
         const correct = this.isCollect;
         this.setState({
             choosen: undefined

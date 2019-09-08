@@ -63,7 +63,7 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
-  private resetGame(correct: boolean) {
+  private resetQuiz(correct: boolean) {
     const question = this.generateNewQuestion();
     this.setState({
       ...question,
@@ -73,7 +73,7 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   private handleAnswer(correct: boolean) {
-    this.resetGame(correct);
+    this.resetQuiz(correct);
   }
 }
 

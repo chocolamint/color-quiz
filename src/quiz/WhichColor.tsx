@@ -36,8 +36,8 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
                         `残念...(正解は ${this.props.answer.code} )`}
                 </span>
                 <br />
-                <button onClick={() => this.endGame()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
-                    次のゲームへ
+                <button onClick={() => this.endQuiz()} style={{ background: "#ffffff", border: "none", color: "#6666cc", fontSize: 18 }}>
+                    次のクイズへ
                 </button>
             </div>);
 
@@ -82,7 +82,7 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
         })
     }
 
-    private endGame() {
+    private endQuiz() {
         const correct = this.isCollect;
         this.setState({
             choosen: undefined
