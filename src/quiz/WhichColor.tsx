@@ -25,18 +25,6 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
     public render() {
 
         const questionBackground = this.state.choosen == null ? "#ffffff" : this.props.answer.color;
-        const questionStyle = {
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            flexGrow: 1,
-            flexShrink: 1,
-            color: blackOrWhite(questionBackground),
-            backgroundColor: questionBackground,
-            fontSize: 30,
-            width: '100%',
-            height: "30%"
-        };
         const message = this.state.choosen == null ?
             (<div className="question">
                 このコードはどの色？
@@ -54,33 +42,22 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
             </div>);
 
         return (
-            <div className="which-color" style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}>
-                <div className="color" style={questionStyle}>
+            <div className="which-color">
+                <div className="color" style={{ color: blackOrWhite(questionBackground), background: questionBackground }}>
                     {this.props.answer.code}
                 </div>
-                <div style={{ flexGrow: 1, flexShrink: 1 }}>
-                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", height: "4em", verticalAlign: "middle", fontSize: 18 }}>
+                <div className="q-and-a">
+                    <div className="question">
                         {message}
                     </div>
-                    <div className="choices" style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", padding: "0 5vw" }}>
+                    <div className="choices">
                         {this.props.choices.map(color => {
-
                             const buttonText = this.state.choosen == null ? "" : color.code;
-                            const buttonStyle: React.CSSProperties = {
-                                width: "100%",
-                                height: "100%",
-                                background: color.color,
-                                color: blackOrWhite(color.color),
-                                border: "solid 1px #999999",
-                                fontSize: 20,
-                                borderRadius: 4
-                            };
-
                             return (
-                                <div key={color.code} style={{ display: "flex", width: "40vw", height: "20vh", padding: "1vh 0" }}>
+                                <div key={color.code} className="choice">
                                     <button
-                                        className="choice"
-                                        style={buttonStyle}
+                                        className="choice-button"
+                                        style={{ background: color.color, color: blackOrWhite(color.color) }}
                                         disabled={this.state.choosen != null}
                                         onClick={() => { this.onClickHandle(color); }}
                                     >

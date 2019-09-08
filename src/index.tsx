@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import './quiz/WhichCode.scss';
+import './quiz/WhichColor.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
