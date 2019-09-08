@@ -6,7 +6,8 @@ import { Random, shuffle } from './Utils';
 import { colors, Color } from './quiz/colors';
 
 interface AppState {
-  whichCode: {
+  questionType: number,
+  fourColors: {
     choices: Color[];
     answer: Color;
   }
@@ -14,37 +15,45 @@ interface AppState {
 
 export default class App extends React.Component<{}, AppState> {
 
+  private random = new Random();
+
   public constructor(props: {}) {
     super(props);
 
-    this.state = {
-      whichCode: this.generateState()
-    };
+    this.state = this.generateNewState();
   }
 
   public render() {
     return (
       <div className="App">
-        {
-          //<WhichCode choices={this.state.whichCode.choices} answer={this.state.whichCode.answer} onAnswer={() => this.handleAnswer()} />
-          <WhichColor choices={this.state.whichCode.choices} answer={this.state.whichCode.answer} onAnswer={() => this.handleAnswer()} />
-        }
+        {(() => {
+          switch (this.state.questionType) {
+            case 0:
+              return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={() => this.handleAnswer()} />
+            case 1:
+              return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onAnswer={() => this.handleAnswer()} />
+          }
+        })()}
       </div>
     );
   }
 
-  private generateState() {
-    const random = new Random();
-    const choices = shuffle(colors, random).slice(0, 4);
-    const answer = choices[random.nextInt(choices.length)];
-    return { choices, answer };
+  private generateNewState() {
+    const questionType = this.random.nextInt(2);
+    const choices = shuffle(colors, this.random).slice(0, 4);
+    const answer = choices[this.random.nextInt(choices.length)];
+    return {
+      questionType,
+      fourColors: {
+        choices,
+        answer
+      }
+    };
   }
 
   private resetGame() {
-    const state = this.generateState();
-    this.setState({
-      whichCode: state
-    });
+    const state = this.generateNewState();
+    this.setState(state);
   }
 
   private handleAnswer() {

@@ -77,10 +77,9 @@ export default class WhichColor extends React.Component<WhichColorProps, WhichCo
                             };
 
                             return (
-                                <div style={{ display: "flex", width: "40vw", height: "20vh", padding: "1vh 0" }}>
+                                <div key={color.code} style={{ display: "flex", width: "40vw", height: "20vh", padding: "1vh 0" }}>
                                     <button
                                         className="choice"
-                                        key={color.code}
                                         style={buttonStyle}
                                         disabled={this.state.choosen != null}
                                         onClick={() => { this.onClickHandle(color); }}
