@@ -1,34 +1,49 @@
-@import "./Utils.scss";
+html,
+body,
+#root,
+.App {
+    height: 100%;
+}
 
 .App {
-    $headerSize: 30px;
-    $footerSize: 70px;
+    $headerSize: 50px;
+    $footerSize: 100px;
+
+    display: flex;
+    flex-direction: column;
 
     .header {
-        @include positionAbsolute($bottom: auto);
+        display: flex;
+        flex-direction: column;
         height: $headerSize;
-        @include flexContainer($flexDirection: column);
         line-height: $headerSize;
         vertical-align: middle;
     }
 
     .main {
-        @include positionAbsolute($top: $headerSize, $bottom: $footerSize);
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 0 30px;
+
+        &>div {
+            flex: 1;
+        }
     }
 
     .footer {
-        @include positionAbsolute($top: auto);
+        display: flex;
         height: $footerSize;
 
-        padding: 0 7.5vw;
+        padding: 0 30px;
 
         .next-quiz-button {
+            flex: 1;
             background: #ffffff;
             border: solid 1px #999999;
             border-radius: 4px;
             color: #000000;
             font-size: 18px;
-            width: 100%;
             height: 50px;
 
             &:disabled {
