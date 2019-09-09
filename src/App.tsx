@@ -2,18 +2,10 @@ import React from 'react';
 import './App.css';
 import { Random, shuffle } from './Utils';
 import { colors, Color, tones, hues } from './quiz/colors';
-import WhichCode from './quiz/WhichCode';
-import ColorChoice, { ColorChoiceQuiz } from './quiz/ColorChoice';
+import ColorChoice, { ColorChoiceQuiz, ColorChoiceQuizSubType } from './quiz/ColorChoice';
 import WhichIsTheXads, { WhichIsTheXadsQuiz } from './quiz/WhichIsTheXads';
 
-type Quiz = WhichIsTheXadsQuiz | WhichCodeQuiz | ColorChoiceQuiz;
-
-interface WhichCodeQuiz {
-  type: "WhichCodeQuiz",
-  choices: Color[];
-  answer: Color;
-}
-
+type Quiz = WhichIsTheXadsQuiz | ColorChoiceQuiz;
 
 interface AppState {
   quiz: Quiz;
@@ -47,8 +39,6 @@ export default class App extends React.Component<{}, AppState> {
         <main className="main">
           {(() => {
             switch (this.state.quiz.type) {
-              case "WhichCodeQuiz":
-                return <WhichCode choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
               case "ColorChoiceQuiz":
                 return <ColorChoice quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
               case "WhichIsTheXadsQuiz":
@@ -76,7 +66,6 @@ export default class App extends React.Component<{}, AppState> {
 
   private generateNewQuiz(): Quiz {
     const generateQuiz = this.sample([
-      this.generateCodeQuiz.bind(this),
       this.generateColorChoiceQuiz.bind(this),
       this.generateXadsQuiz.bind(this)
     ]);
@@ -84,21 +73,14 @@ export default class App extends React.Component<{}, AppState> {
     return generateQuiz();
   }
 
-  private generateCodeQuiz(): WhichCodeQuiz {
-    const choices = shuffle(colors, this.random).slice(0, 4);
-    const answer = this.sample(choices);
-    return {
-      type: "WhichCodeQuiz",
-      choices: shuffle(choices, this.random),
-      answer: answer
-    };
-  }
-
   private generateColorChoiceQuiz(): ColorChoiceQuiz {
+    const subTypes: ColorChoiceQuizSubType[] = ["ColorChoice", "CodeChoice"];
+    const subType = this.sample(subTypes);
     const choices = shuffle(colors, this.random).slice(0, 4);
     const answer = this.sample(choices);
     return {
       type: "ColorChoiceQuiz",
+      subType,
       choices: shuffle(choices, this.random),
       answer: answer
     };

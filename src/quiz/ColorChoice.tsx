@@ -2,8 +2,10 @@ import React from 'react';
 import { Color } from './colors';
 import { blackOrWhite } from '../Utils';
 
+export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
 export interface ColorChoiceQuiz {
     type: "ColorChoiceQuiz",
+    subType: ColorChoiceQuizSubType,
     choices: Color[];
     answer: Color;
 }
@@ -24,33 +26,40 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
 
         const quiz = this.props.quiz;
         const correct = this.props.correct;
-        const answerColor = correct === undefined ? "transparent" : quiz.answer.color;
+        const answerColor = this.beforeAnswer && quiz.subType === "ColorChoice" ? "transparent" : quiz.answer.color;
 
         return (
             <div className="color-choice">
                 <div className="question">
                     <div className="color" style={{ color: blackOrWhite(answerColor), background: answerColor }}>
-                        {quiz.answer.code}
+                        {quiz.subType === "CodeChoice" && this.beforeAnswer ? "" : quiz.answer.code}
                     </div>
                     <div className="message">
-                        {correct === undefined ?
-                            `このコードはどの色？` :
-                            correct ?
-                                `正解！` :
-                                `残念...(正解は ${quiz.answer.code} )`}
+                        {(() => {
+                            if (this.beforeAnswer) {
+                                switch (quiz.subType) {
+                                    case "CodeChoice":
+                                        return "この色はどれ？";
+                                    case "ColorChoice":
+                                        return "このコードはどの色？";
+                                }
+                            }
+                            return correct ? "🎉正解！🎉" : "残念...😢";
+                        })()}
                     </div>
                 </div>
                 <div className="choices">
                     {quiz.choices.map(color => {
-                        const buttonText = correct === undefined ? "" : color.code;
+                        const buttonText = this.beforeAnswer && quiz.subType === "ColorChoice" ? "" : color.code;
+                        const buttonBackground = this.beforeAnswer && quiz.subType === "CodeChoice" ? "#ffffff" : color.color;
                         const choiseClassNames = "choice" +
-                            ((correct !== undefined && quiz.answer === color) ? " answer" : "");
+                            ((!this.beforeAnswer && quiz.answer === color) ? " answer" : "");
                         return (
                             <div key={color.code} className={choiseClassNames}>
                                 <button
                                     className="choice-button"
-                                    style={{ background: color.color, color: blackOrWhite(color.color) }}
-                                    disabled={correct !== undefined}
+                                    style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}
+                                    disabled={!this.beforeAnswer}
                                     onClick={() => { this.handleChooseButtonClick(color); }}
                                 >
                                     {buttonText}
@@ -61,6 +70,10 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
                 </div>
             </div>
         );
+    }
+
+    private get beforeAnswer() {
+        return this.props.correct === undefined;
     }
 
     private handleChooseButtonClick(color: Color) {
