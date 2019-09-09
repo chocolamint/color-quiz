@@ -2,39 +2,25 @@
 
 .which-color {
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    @include flexContainer($flexDirection: column, $alignItems: stretch);
+    @include positionAbsolute();
 
     .question {
-        flex-grow: 1;
-        flex-shrink: 1;
+        flex: 1 1;
         position: relative;
 
         $messageHeight: 70px;
 
         .color {
-            flex-grow: 1;
-            flex-shrink: 1;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-grow: 1;
-            flex-shrink: 1;
+            @include flexContainer();
+            flex: 1 1;
             font-size: 30px;
 
             @include positionAbsolute($bottom: $messageHeight);
         }
 
         .message {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
+            @include flexContainer($flexDirection: column);
             height: $messageHeight;
             vertical-align: middle;
             font-size: 18px;
@@ -53,8 +39,7 @@
     }
 
     .choices {
-        display: flex;
-        justify-content: space-around;
+        @include flexContainer();
         flex-wrap: wrap;
         padding: 0 5vw;
 
