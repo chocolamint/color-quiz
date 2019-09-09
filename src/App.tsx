@@ -115,7 +115,7 @@ export default class App extends React.Component<{}, AppState> {
     const complexHue = getComplexHue(answerHue);
     const toSomeColor = (hue: number) => {
       const code = tones[this.random.nextInt(tones.length)] + hue;
-      return colors.find(x => x.code == code)!
+      return colors.find(x => x.code === code)!
     };
     const randomColors = () => {
       while (true) {
