@@ -1,7 +1,7 @@
 import React from 'react';
 import { Color } from './colors';
 import { blackOrWhite } from '../Utils';
-import { QuizComponentProps } from './Quiz';
+import { QuizComponentProps, QuizStatus } from './Quiz';
 
 export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
 export interface ColorChoiceQuiz {
@@ -24,13 +24,14 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
     public render() {
 
         const quiz = this.props.quiz;
-        const answerColor = this.beforeAnswer && quiz.subType === "ColorChoice" ? "transparent" : quiz.answer.color;
+        const status = this.props.quizStatus;
+        const answerColor = status === QuizStatus.Thinking && quiz.subType === "ColorChoice" ? "transparent" : quiz.answer.color;
 
         return (
             <div className="color-choice">
                 <div className="question">
                     <div className="color" style={{ color: blackOrWhite(answerColor), background: answerColor }}>
-                        {quiz.subType === "CodeChoice" && this.beforeAnswer ? "" : quiz.answer.code}
+                        {quiz.subType === "CodeChoice" && status === QuizStatus.Thinking ? "" : quiz.answer.code}
                     </div>
                     <div className="message">
                         {this.props.message}
@@ -38,16 +39,16 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
                 </div>
                 <div className="choices">
                     {quiz.choices.map(color => {
-                        const buttonText = this.beforeAnswer && quiz.subType === "ColorChoice" ? "" : color.code;
-                        const buttonBackground = this.beforeAnswer && quiz.subType === "CodeChoice" ? "#ffffff" : color.color;
+                        const buttonText = status === QuizStatus.Thinking && quiz.subType === "ColorChoice" ? "" : color.code;
+                        const buttonBackground = status === QuizStatus.Thinking && quiz.subType === "CodeChoice" ? "#ffffff" : color.color;
                         const choiseClassNames = "choice" +
-                            ((!this.beforeAnswer && quiz.answer === color) ? " answer" : "");
+                            ((status !== QuizStatus.Thinking && quiz.answer === color) ? " answer" : "");
                         return (
                             <div key={color.code} className={choiseClassNames}>
                                 <button
                                     className="choice-button"
                                     style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}
-                                    disabled={!this.beforeAnswer}
+                                    disabled={status !== QuizStatus.Thinking}
                                     onClick={() => { this.handleChooseButtonClick(color); }}
                                 >
                                     {buttonText}
@@ -60,12 +61,8 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
         );
     }
 
-    private get beforeAnswer() {
-        return this.props.correct === undefined;
-    }
-
-    private handleChooseButtonClick(color: Color) {
-        const correct = color.code === this.props.quiz.answer.code;
+    private handleChooseButtonClick(selected: Color) {
+        const correct = selected.code === this.props.quiz.answer.code;
         this.props.onAnswer(correct);
     }
 }

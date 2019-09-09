@@ -4,13 +4,14 @@ import { Random, shuffle } from './Utils';
 import { colors, Color, tones, hues } from './quiz/colors';
 import ColorChoice, { ColorChoiceQuiz, ColorChoiceQuizSubType } from './quiz/ColorChoice';
 import ColorScheme, { ColorSchemeQuiz } from './quiz/ColorScheme';
+import { QuizStatus } from './quiz/Quiz';
 
 type Quiz = ColorSchemeQuiz | ColorChoiceQuiz;
 
 interface AppState {
   quiz: Quiz;
   message: string;
-  correct?: boolean;
+  quizStatus: QuizStatus;
   quizCount: number;
   correctCount: number;
 }
@@ -26,7 +27,7 @@ export default class App extends React.Component<{}, AppState> {
     this.state = {
       quiz,
       message: question,
-      correct: undefined,
+      quizStatus: QuizStatus.Thinking,
       quizCount: 0,
       correctCount: 0
     };
@@ -42,15 +43,15 @@ export default class App extends React.Component<{}, AppState> {
           {(() => {
             switch (this.state.quiz.type) {
               case "ColorChoiceQuiz":
-                return <ColorChoice quiz={this.state.quiz} message={this.state.message} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+                return <ColorChoice quiz={this.state.quiz} message={this.state.message} quizStatus={this.state.quizStatus} onAnswer={e => this.handleAnswer(e)} />
               case "ColorSchemeQuiz":
-                return <ColorScheme quiz={this.state.quiz} message={this.state.message} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+                return <ColorScheme quiz={this.state.quiz} message={this.state.message} quizStatus={this.state.quizStatus} onAnswer={e => this.handleAnswer(e)} />
             }
           })()}
         </main>
         <footer className="footer">
           <div className="control-buttons">
-            <button className="next-quiz-button" disabled={this.state.correct === undefined} onClick={() => this.handleNextQuizButton()}>
+            <button className="next-quiz-button" disabled={this.state.quizStatus === QuizStatus.Thinking} onClick={() => this.handleNextQuizButton()}>
               次のクイズへ
           </button>
           </div>
@@ -128,20 +129,19 @@ export default class App extends React.Component<{}, AppState> {
 
   private nextQuiz() {
     const { quiz, question } = this.generateNewQuiz();
-    const correct = this.state.correct;
     this.setState({
       quiz,
       message: question,
-      correct: undefined,
+      quizStatus: QuizStatus.Thinking,
       quizCount: this.state.quizCount + 1,
-      correctCount: this.state.correctCount + (correct ? 1 : 0)
+      correctCount: this.state.correctCount + (this.state.quizStatus === QuizStatus.Correct ? 1 : 0)
     });
   }
 
   private handleAnswer(correct: boolean) {
     this.setState({
       message: correct ? "🎉正解！🎉" : "残念...😢",
-      correct
+      quizStatus: correct ? QuizStatus.Correct : QuizStatus.Incorrect
     });
   }
 

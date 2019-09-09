@@ -1,7 +1,7 @@
 import React from "react";
 import { Color } from "./colors";
 import { blackOrWhite } from "../Utils";
-import { QuizComponentProps } from "./Quiz";
+import { QuizComponentProps, QuizStatus } from "./Quiz";
 
 export type ColorSchemeQuizSubType = "Dyads";
 export interface ColorSchemeQuiz {
@@ -23,6 +23,8 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
 
     public render() {
 
+        const status = this.props.quizStatus;
+
         return (
             <div className="which-dyads">
                 <div className="question">
@@ -31,22 +33,22 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
                     </div>
                 </div>
                 <div className="choices">
-                    {this.props.quiz.choices.map(tuple => {
+                    {this.props.quiz.choices.map(choice => {
                         const choiseClassNames = "choice" +
-                            ((!this.beforeAnswer && this.props.quiz.answer === tuple.key) ? " answer" : "");
+                            ((status !== QuizStatus.Thinking && this.props.quiz.answer === choice.key) ? " answer" : "");
                         return (
-                            <div key={tuple.key} className={choiseClassNames}>
+                            <div key={choice.key} className={choiseClassNames}>
                                 <div className="colors">
-                                    {tuple.colors.map(color => (
+                                    {choice.colors.map(color => (
                                         <div className="color" style={{ background: color.color, color: blackOrWhite(color.color) }}>
-                                            {(this.beforeAnswer) ? "" : color.code}
+                                            {(status === QuizStatus.Thinking) ? "" : color.code}
                                         </div>
                                     ))}
                                 </div>
                                 <button
                                     className="choice-button"
-                                    disabled={!this.beforeAnswer}
-                                    onClick={() => { this.handleChooseButtonClick(tuple); }}
+                                    disabled={status !== QuizStatus.Thinking}
+                                    onClick={() => { this.handleChooseButtonClick(choice); }}
                                 >
                                     &nbsp;
                                 </button>
@@ -56,10 +58,6 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
                 </div>
             </div>
         );
-    }
-
-    private get beforeAnswer() {
-        return this.props.correct === undefined;
     }
 
     private handleChooseButtonClick(tuple: { key: string }) {

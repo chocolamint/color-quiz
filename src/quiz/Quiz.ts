@@ -1,5 +1,11 @@
 export interface QuizComponentProps {
     message: string;
-    correct?: boolean;
+    quizStatus: QuizStatus;
     onAnswer: (correct: boolean) => void;
+}
+
+export enum QuizStatus {
+    Thinking,
+    Correct,
+    Incorrect
 }
