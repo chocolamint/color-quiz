@@ -2,6 +2,7 @@ import React from "react";
 import { Color } from "./colors";
 
 export interface WhichIsTheXadsQuiz {
+    type: "WhichIsTheXadsQuiz",
     choices: { key: string, colors: Color[] }[];
     answer: string;
 }
