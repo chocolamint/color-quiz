@@ -37,6 +37,11 @@
 
             .choice-button {
                 @include choiceButton();
+                border: solid 1px #999999;
+
+                &:disabled {
+                    border: none;
+                }
             }
         }
     }
