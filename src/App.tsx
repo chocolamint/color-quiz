@@ -36,7 +36,7 @@ export default class App extends React.Component<{}, AppState> {
     return (
       <div className="App">
         <header className="header">
-          {this.state.quizCount} 問中 {this.state.correctCount} 問正解
+          色彩クイズ
         </header>
         <main className="main">
           {(() => {
@@ -49,9 +49,14 @@ export default class App extends React.Component<{}, AppState> {
           })()}
         </main>
         <footer className="footer">
-          <button className="next-quiz-button" disabled={this.state.correct === undefined} onClick={() => this.handleNextQuizButton()}>
-            次のクイズへ
+          <div className="control-buttons">
+            <button className="next-quiz-button" disabled={this.state.correct === undefined} onClick={() => this.handleNextQuizButton()}>
+              次のクイズへ
           </button>
+          </div>
+          <div className="status">
+            正解数: {this.state.correctCount} / {this.state.quizCount}
+          </div>
         </footer>
       </div>
     );

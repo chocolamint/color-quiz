@@ -1,40 +1,73 @@
-@import "./Utils.scss";
+html,
+body,
+#root,
+.App {
+    height: 100%;
+}
 
 .App {
-    $headerSize: 30px;
-    $footerSize: 70px;
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5;
 
     .header {
-        @include positionAbsolute($bottom: auto);
-        height: $headerSize;
-        @include flexContainer($flexDirection: column);
-        line-height: $headerSize;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        height: 50px;
         vertical-align: middle;
+        background: #5f5f5f;
+        color: #ffffff;
+        font-size: 18px;
     }
 
     .main {
-        @include positionAbsolute($top: $headerSize, $bottom: $footerSize);
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 30px;
+
+        &>div {
+            flex: 1;
+        }
     }
 
     .footer {
-        @include positionAbsolute($top: auto);
-        height: $footerSize;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: auto;
 
-        padding: 0 7.5vw;
+        .control-buttons {
+            padding: 0 30px 30px;
+            display: flex;
 
-        .next-quiz-button {
-            background: #ffffff;
-            border: solid 1px #999999;
-            border-radius: 4px;
-            color: #000000;
-            font-size: 18px;
-            width: 100%;
-            height: 50px;
+            .next-quiz-button {
+                flex: 1;
+                color: #333333;
+                background: #ffffff;
+                border: solid 1px #cccccc;
+                border-radius: 4px;
+                font-size: 18px;
+                height: 50px;
 
-            &:disabled {
-                color: #666666;
-                background: #cccccc;
+                &:disabled {
+                    color: #b0b0b0;
+                    background: #e0e0e0;
+                    border-color: transparent;
+                }
             }
+        }
+
+        .status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            height: 40px;
+            background: #5f5f5f;
+            color: #ffffff;
         }
     }
 }

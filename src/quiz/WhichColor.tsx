@@ -17,7 +17,7 @@ export default class WhichColor extends React.Component<WhichColorProps, {}> {
 
     public render() {
 
-        const answerColor = this.props.correct === undefined ? "#ffffff" : this.props.answer.color;
+        const answerColor = this.props.correct === undefined ? "transparent" : this.props.answer.color;
 
         return (
             <div className="which-color">
