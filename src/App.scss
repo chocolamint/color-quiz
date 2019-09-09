@@ -1,0 +1,25 @@
+.App {
+    $headerSize: 30px;
+
+    .header {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: $headerSize;
+        display: flex;
+        justify-content: space-around;
+        align-content: center;
+        flex-direction: row;
+        line-height: $headerSize;
+        vertical-align: middle;
+    }
+
+    .main {
+        position: absolute;
+        top: $headerSize;
+        right: 0;
+        left: 0;
+        bottom: 0;
+    }
+}
