@@ -25,6 +25,11 @@
 
             @include choice();
             position: relative;
+            transform: scale(1, 1);
+
+            &.answer {
+                @include answerEmphasisAnimation();
+            }
 
             .colors {
                 @include choiceButton();

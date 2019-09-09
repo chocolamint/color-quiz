@@ -35,9 +35,11 @@ export default class WhichCode extends React.Component<WhichCodeProps> {
                     {this.props.choices.map(color => {
 
                         const buttonBackground = this.props.correct === undefined ? "#ffffff" : color.color;
+                        const choiseClassNames = "choice" +
+                            ((this.props.correct !== undefined && this.props.answer === color) ? " answer" : "");
 
                         return (
-                            <div key={color.code} className="choice">
+                            <div key={color.code} className={choiseClassNames}>
                                 <button
                                     className="choice-button"
                                     style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}

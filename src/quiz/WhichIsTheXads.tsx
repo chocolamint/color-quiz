@@ -29,8 +29,10 @@ export default class WhichIsTheXads extends React.Component<WhichIsTheXadsProps>
                 </div>
                 <div className="choices">
                     {this.props.quiz.choices.map(tuple => {
+                        const choiseClassNames = "choice" +
+                            ((this.props.correct !== undefined && this.props.quiz.answer === tuple.key) ? " answer" : "");
                         return (
-                            <div key={tuple.key} className="choice">
+                            <div key={tuple.key} className={choiseClassNames}>
                                 <div className="colors">
                                     {tuple.colors.map(color => (
                                         <div className="color" style={{ background: color.color, color: blackOrWhite(color.color) }}>
