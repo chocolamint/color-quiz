@@ -1,6 +1,7 @@
 import React from 'react';
 import { Color } from './colors';
 import { blackOrWhite } from '../Utils';
+import { QuizComponentProps } from './Quiz';
 
 export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
 export interface ColorChoiceQuiz {
@@ -10,10 +11,8 @@ export interface ColorChoiceQuiz {
     answer: Color;
 }
 
-interface ColorChoiceProps {
+interface ColorChoiceProps extends QuizComponentProps {
     quiz: ColorChoiceQuiz;
-    correct?: boolean;
-    onAnswer: (correct: boolean) => void;
 }
 
 export default class ColorChoice extends React.Component<ColorChoiceProps> {
@@ -25,7 +24,6 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
     public render() {
 
         const quiz = this.props.quiz;
-        const correct = this.props.correct;
         const answerColor = this.beforeAnswer && quiz.subType === "ColorChoice" ? "transparent" : quiz.answer.color;
 
         return (
@@ -35,17 +33,7 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
                         {quiz.subType === "CodeChoice" && this.beforeAnswer ? "" : quiz.answer.code}
                     </div>
                     <div className="message">
-                        {(() => {
-                            if (this.beforeAnswer) {
-                                switch (quiz.subType) {
-                                    case "CodeChoice":
-                                        return "この色はどれ？";
-                                    case "ColorChoice":
-                                        return "このコードはどの色？";
-                                }
-                            }
-                            return correct ? "🎉正解！🎉" : "残念...😢";
-                        })()}
+                        {this.props.message}
                     </div>
                 </div>
                 <div className="choices">

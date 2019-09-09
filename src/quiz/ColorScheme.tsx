@@ -1,6 +1,7 @@
 import React from "react";
 import { Color } from "./colors";
 import { blackOrWhite } from "../Utils";
+import { QuizComponentProps } from "./Quiz";
 
 export type ColorSchemeQuizSubType = "Dyads";
 export interface ColorSchemeQuiz {
@@ -10,10 +11,8 @@ export interface ColorSchemeQuiz {
     answer: string;
 }
 
-interface ColorSchemeProps {
+interface ColorSchemeProps extends QuizComponentProps {
     quiz: ColorSchemeQuiz;
-    correct?: boolean;
-    onAnswer: (correct: boolean) => void;
 }
 
 export default class ColorScheme extends React.Component<ColorSchemeProps> {
@@ -24,15 +23,11 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
 
     public render() {
 
-        const correct = this.props.correct;
-
         return (
             <div className="which-dyads">
                 <div className="question">
                     <div className="message">
-                        {this.beforeAnswer ?
-                            "ダイアード配色はどれ？" :
-                            correct ? "🎉正解！🎉" : "残念...😢"}
+                        {this.props.message}
                     </div>
                 </div>
                 <div className="choices">

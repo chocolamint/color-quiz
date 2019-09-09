@@ -9,6 +9,7 @@ type Quiz = ColorSchemeQuiz | ColorChoiceQuiz;
 
 interface AppState {
   quiz: Quiz;
+  message: string;
   correct?: boolean;
   quizCount: number;
   correctCount: number;
@@ -21,9 +22,10 @@ export default class App extends React.Component<{}, AppState> {
   public constructor(props: {}) {
     super(props);
 
-    const quiz = this.generateNewQuiz();
+    const { quiz, question } = this.generateNewQuiz();
     this.state = {
       quiz,
+      message: question,
       correct: undefined,
       quizCount: 0,
       correctCount: 0
@@ -40,9 +42,9 @@ export default class App extends React.Component<{}, AppState> {
           {(() => {
             switch (this.state.quiz.type) {
               case "ColorChoiceQuiz":
-                return <ColorChoice quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+                return <ColorChoice quiz={this.state.quiz} message={this.state.message} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
               case "ColorSchemeQuiz":
-                return <ColorScheme quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+                return <ColorScheme quiz={this.state.quiz} message={this.state.message} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
             }
           })()}
         </main>
@@ -64,7 +66,7 @@ export default class App extends React.Component<{}, AppState> {
     return array[this.random.nextInt(array.length)];
   }
 
-  private generateNewQuiz(): Quiz {
+  private generateNewQuiz(): { quiz: Quiz, question: string } {
     const generateQuiz = this.sample([
       this.generateColorChoiceQuiz.bind(this),
       this.generateXadsQuiz.bind(this)
@@ -73,20 +75,23 @@ export default class App extends React.Component<{}, AppState> {
     return generateQuiz();
   }
 
-  private generateColorChoiceQuiz(): ColorChoiceQuiz {
+  private generateColorChoiceQuiz(): { quiz: ColorChoiceQuiz, question: string } {
     const subTypes: ColorChoiceQuizSubType[] = ["ColorChoice", "CodeChoice"];
     const subType = this.sample(subTypes);
     const choices = shuffle(colors, this.random).slice(0, 4);
     const answer = this.sample(choices);
     return {
-      type: "ColorChoiceQuiz",
-      subType,
-      choices: shuffle(choices, this.random),
-      answer: answer
+      quiz: {
+        type: "ColorChoiceQuiz",
+        subType,
+        choices: shuffle(choices, this.random),
+        answer: answer
+      },
+      question: subType === "ColorChoice" ? "このコードはどの色？" : "この色はどれ？"
     };
   }
 
-  private generateXadsQuiz(): ColorSchemeQuiz {
+  private generateXadsQuiz(): { quiz: ColorSchemeQuiz, question: string } {
     const answerHue = this.sample(hues);
     const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
     const complexHue = getComplexHue(answerHue);
@@ -111,18 +116,22 @@ export default class App extends React.Component<{}, AppState> {
       .concat(answer);
 
     return {
-      type: "ColorSchemeQuiz",
-      subType: "Dyads",
-      choices: shuffle(choices, this.random),
-      answer: "answer"
+      quiz: {
+        type: "ColorSchemeQuiz",
+        subType: "Dyads",
+        choices: shuffle(choices, this.random),
+        answer: "answer"
+      },
+      question: "ダイアード配色はどれ？"
     };
   }
 
   private nextQuiz() {
-    const quiz = this.generateNewQuiz();
+    const { quiz, question } = this.generateNewQuiz();
     const correct = this.state.correct;
     this.setState({
       quiz,
+      message: question,
       correct: undefined,
       quizCount: this.state.quizCount + 1,
       correctCount: this.state.correctCount + (correct ? 1 : 0)
@@ -131,6 +140,7 @@ export default class App extends React.Component<{}, AppState> {
 
   private handleAnswer(correct: boolean) {
     this.setState({
+      message: correct ? "🎉正解！🎉" : "残念...😢",
       correct
     });
   }
