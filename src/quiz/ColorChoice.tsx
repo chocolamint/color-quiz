@@ -2,9 +2,14 @@ import React from 'react';
 import { Color } from './colors';
 import { blackOrWhite } from '../Utils';
 
-interface ColorChoiceProps {
+export interface ColorChoiceQuiz {
+    type: "ColorChoiceQuiz",
     choices: Color[];
     answer: Color;
+}
+
+interface ColorChoiceProps {
+    quiz: ColorChoiceQuiz;
     correct?: boolean;
     onAnswer: (correct: boolean) => void;
 }
@@ -17,33 +22,35 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
 
     public render() {
 
-        const answerColor = this.props.correct === undefined ? "transparent" : this.props.answer.color;
+        const quiz = this.props.quiz;
+        const correct = this.props.correct;
+        const answerColor = correct === undefined ? "transparent" : quiz.answer.color;
 
         return (
             <div className="color-choice">
                 <div className="question">
                     <div className="color" style={{ color: blackOrWhite(answerColor), background: answerColor }}>
-                        {this.props.answer.code}
+                        {quiz.answer.code}
                     </div>
                     <div className="message">
-                        {this.props.correct === undefined ?
+                        {correct === undefined ?
                             `このコードはどの色？` :
-                            this.props.correct ?
+                            correct ?
                                 `正解！` :
-                                `残念...(正解は ${this.props.answer.code} )`}
+                                `残念...(正解は ${quiz.answer.code} )`}
                     </div>
                 </div>
                 <div className="choices">
-                    {this.props.choices.map(color => {
-                        const buttonText = this.props.correct === undefined ? "" : color.code;
+                    {quiz.choices.map(color => {
+                        const buttonText = correct === undefined ? "" : color.code;
                         const choiseClassNames = "choice" +
-                            ((this.props.correct !== undefined && this.props.answer === color) ? " answer" : "");
+                            ((correct !== undefined && quiz.answer === color) ? " answer" : "");
                         return (
                             <div key={color.code} className={choiseClassNames}>
                                 <button
                                     className="choice-button"
                                     style={{ background: color.color, color: blackOrWhite(color.color) }}
-                                    disabled={this.props.correct !== undefined}
+                                    disabled={correct !== undefined}
                                     onClick={() => { this.handleChooseButtonClick(color); }}
                                 >
                                     {buttonText}
@@ -57,6 +64,6 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
     }
 
     private handleChooseButtonClick(color: Color) {
-        this.props.onAnswer(color.code === this.props.answer.code);
+        this.props.onAnswer(color.code === this.props.quiz.answer.code);
     }
 }
