@@ -38,6 +38,7 @@
             .choice-button {
                 @include choiceButton();
                 border: solid 1px #999999;
+                font-family: Consolas, Menlo;
 
                 &:disabled {
                     border: none;
