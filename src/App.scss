@@ -1,25 +1,17 @@
+@import "./Utils.scss";
+
 .App {
     $headerSize: 30px;
 
     .header {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
+        @include positionAbsolute($bottom: auto);
         height: $headerSize;
-        display: flex;
-        justify-content: space-around;
-        align-content: center;
-        flex-direction: row;
+        @include flexContainer($flexDirection: column);
         line-height: $headerSize;
         vertical-align: middle;
     }
 
     .main {
-        position: absolute;
-        top: $headerSize;
-        right: 0;
-        left: 0;
-        bottom: 0;
+        @include positionAbsolute($top: $headerSize);
     }
 }
