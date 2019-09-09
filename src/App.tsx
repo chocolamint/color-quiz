@@ -8,6 +8,7 @@ import { colors, Color } from './quiz/colors';
 interface AppState {
   quizType: number;
   quizCount: number;
+  correct?: boolean;
   correctCount: number;
   fourColors: {
     choices: Color[];
@@ -25,6 +26,7 @@ export default class App extends React.Component<{}, AppState> {
     const quiz = this.generateNewQuiz();
     this.state = {
       ...quiz,
+      correct: undefined,
       quizCount: 0,
       correctCount: 0
     };
@@ -40,12 +42,17 @@ export default class App extends React.Component<{}, AppState> {
           {(() => {
             switch (this.state.quizType) {
               case 0:
-                return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onQuizEnd={e => this.handleQuizEnd(e)} />
+                return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
               case 1:
-                return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} onQuizEnd={e => this.handleQuizEnd(e)} />
+                return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
             }
           })()}
         </main>
+        <footer className="footer">
+          <button className="next-quiz-button" disabled={this.state.correct === undefined} onClick={() => this.handleNextQuizButton()}>
+            次のクイズへ
+          </button>
+        </footer>
       </div>
     );
   }
@@ -56,6 +63,7 @@ export default class App extends React.Component<{}, AppState> {
     const answer = choices[this.random.nextInt(choices.length)];
     return {
       quizType,
+      correct: undefined,
       fourColors: {
         choices,
         answer
@@ -63,8 +71,9 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
-  private nextQuiz(correct: boolean) {
+  private nextQuiz() {
     const quiz = this.generateNewQuiz();
+    const correct = this.state.correct;
     this.setState({
       ...quiz,
       quizCount: this.state.quizCount + 1,
@@ -72,8 +81,15 @@ export default class App extends React.Component<{}, AppState> {
     });
   }
 
-  private handleQuizEnd(correct: boolean) {
-    this.nextQuiz(correct);
+  private handleAnswer(correct: boolean) {
+    this.setState({
+      correct
+    });
+  }
+
+  private handleNextQuizButton() {
+
+    this.nextQuiz();
   }
 }
 

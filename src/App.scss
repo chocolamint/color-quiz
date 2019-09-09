@@ -1,0 +1,40 @@
+@import "./Utils.scss";
+
+.App {
+    $headerSize: 30px;
+    $footerSize: 70px;
+
+    .header {
+        @include positionAbsolute($bottom: auto);
+        height: $headerSize;
+        @include flexContainer($flexDirection: column);
+        line-height: $headerSize;
+        vertical-align: middle;
+    }
+
+    .main {
+        @include positionAbsolute($top: $headerSize, $bottom: $footerSize);
+    }
+
+    .footer {
+        @include positionAbsolute($top: auto);
+        height: $footerSize;
+
+        padding: 0 7.5vw;
+
+        .next-quiz-button {
+            background: #ffffff;
+            border: solid 1px #999999;
+            border-radius: 4px;
+            color: #000000;
+            font-size: 18px;
+            width: 100%;
+            height: 50px;
+
+            &:disabled {
+                color: #666666;
+                background: #cccccc;
+            }
+        }
+    }
+}

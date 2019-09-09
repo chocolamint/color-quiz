@@ -1,63 +1,42 @@
+@import "../Utils.scss";
+@import "./Quiz.scss";
+
 .which-code {
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    @include quiz();
 
-    .color {
-        flex-grow: 1;
-        flex-shrink: 1;
-        width: 100%;
-        height: 30%;
-    }
+    .question {
 
-    .q-and-a {
-        flex-grow: 1;
-        flex-shrink: 1;
+        @include question();
+        $messageHeight: 70px;
 
-        .message {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            height: 4em;
-            vertical-align: middle;
-            font-size: 18px;
+        .color {
+            @include flexContainer();
+            flex: 1 1;
+            font-size: 30px;
 
-            .answer {
-                .next-quiz-button {
-                    background: #ffffff;
-                    border: none;
-                    color: #6666cc;
-                    font-size: 18px;
-                }
-            }
+            @include positionAbsolute($bottom: $messageHeight);
         }
 
-        .choices {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            padding: 0 5vw;
+        .message {
+            @include flexContainer($flexDirection: column);
+            @include positionAbsolute($top: auto);
+            height: $messageHeight;
+            vertical-align: middle;
+            font-size: 18px;
+        }
+    }
 
-            .choice {
+    .choices {
 
-                display: flex;
-                width: 40vw;
-                height: 20vh;
-                padding: 1vh 0;
+        @include choices();
 
-                .choice-button {
-                    width: 100%;
-                    height: 100%;
-                    border: solid 1px #999999;
-                    font-size: 20px;
-                    border-radius: 3px;
-                }
+        .choice {
+
+            @include choice();
+
+            .choice-button {
+                @include choiceButton();
             }
         }
     }

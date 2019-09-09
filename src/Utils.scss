@@ -1,0 +1,15 @@
+@mixin positionAbsolute($top: 0, $right: 0, $bottom: 0, $left: 0) {
+    position: absolute;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+@mixin flexContainer($flexDirection: row, $justifyContent: space-evenly, $alignItems: center) {
+
+    display: flex;
+    flex-direction: $flexDirection;
+    justify-content: $justifyContent;
+    align-items: $alignItems;
+}
