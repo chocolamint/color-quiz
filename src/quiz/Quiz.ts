@@ -1,3 +1,5 @@
+import { Random } from "../Utils";
+
 export interface QuizComponentProps {
     message: string;
     quizStatus: QuizStatus;
