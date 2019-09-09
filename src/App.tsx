@@ -42,7 +42,6 @@ export default class App extends React.Component<{}, AppState> {
           {(() => {
             switch (this.state.quizType) {
               case 0:
-              case 1:
                 return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
               case 1:
                 return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
