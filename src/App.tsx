@@ -118,10 +118,15 @@ export default class App extends React.Component<{}, AppState> {
       return colors.find(x => x.code == code)!
     };
     const randomColors = () => {
-      const hue = this.sample(hues);
-      const c = getComplexHue(hue);
-      const pair = this.sample(hues.filter(x => x !== c));
-      return [hue, pair].map(toSomeColor);
+      while (true) {
+        const hue = this.sample(hues);
+        const c = getComplexHue(hue);
+        const pair = this.sample(hues.filter(x => x !== c));
+        const result = [hue, pair].map(toSomeColor);
+        // 偶然同じ色になってしまったらもう1回
+        if (result[0].code === result[1].code) continue;
+        return result;
+      }
     };
     const answer = { key: "answer", colors: [answerHue, complexHue].map(toSomeColor) };
     const choices = [...Array(3)].map((_, i) => i)
