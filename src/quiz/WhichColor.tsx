@@ -13,10 +13,6 @@ export default class WhichColor extends React.Component<WhichColorProps, {}> {
 
     public constructor(props: WhichColorProps) {
         super(props);
-
-        this.state = {
-
-        };
     }
 
     public render() {
@@ -59,9 +55,6 @@ export default class WhichColor extends React.Component<WhichColorProps, {}> {
     }
 
     private handleChooseButtonClick(color: Color) {
-        this.setState({
-            choosen: color
-        })
         this.props.onAnswer(color.code === this.props.answer.code);
     }
 }

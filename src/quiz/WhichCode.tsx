@@ -5,89 +5,56 @@ import { blackOrWhite } from '../Utils';
 interface WhichCodeProps {
     choices: Color[];
     answer: Color;
-    onQuizEnd: (correct: boolean) => void;
+    correct?: boolean;
+    onAnswer: (correct: boolean) => void;
 }
 
-interface WhichCodeState {
-    choosen?: Color;
-}
-
-export default class WhichCode extends React.Component<WhichCodeProps, WhichCodeState> {
+export default class WhichCode extends React.Component<WhichCodeProps, {}> {
 
     public constructor(props: WhichCodeProps) {
         super(props);
-
-        this.state = {
-
-        };
     }
 
     public render() {
 
-        const message = this.state.choosen == null ?
-            (<div className="question">
-                この色はどれ？
-            </div>) :
-            (<div className="answer">
-                <span>
-                    {this.isCollect ?
-                        `正解！` :
-                        `残念...(正解は ${this.props.answer.code} )`}
-                </span>
-                <br />
-                <button className="next-quiz-button" onClick={() => this.handleNextQuizButton()}>
-                    次のクイズへ
-                </button>
-            </div>);
-
         return (
             <div className="which-code">
-                <div className="color" style={{ backgroundColor: this.props.answer.color }}>
+                <div className="question">
+                    <div className="color" style={{ backgroundColor: this.props.answer.color }}>
 
-                </div>
-                <div className="q-and-a">
+                    </div>
                     <div className="message">
-                        {message}
+                        {this.props.correct === undefined ?
+                            `この色はどれ？` :
+                            this.props.correct ?
+                                `正解！` :
+                                `残念...(正解は ${this.props.answer.code} )`}
                     </div>
-                    <div className="choices">
-                        {this.props.choices.map(color => {
+                </div>
+                <div className="choices">
+                    {this.props.choices.map(color => {
 
-                            const buttonBackground = this.state.choosen == null ? "#ffffff" : color.color;
+                        const buttonBackground = this.props.correct === undefined ? "#ffffff" : color.color;
 
-                            return (
-                                <div key={color.code} className="choice">
-                                    <button
-                                        className="choice-button"
-                                        style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}
-                                        disabled={this.state.choosen != null}
-                                        onClick={() => { this.onClickHandle(color); }}
-                                    >
-                                        {color.code}
-                                    </button>
-                                </div>
-                            );
-                        })}
-                    </div>
+                        return (
+                            <div key={color.code} className="choice">
+                                <button
+                                    className="choice-button"
+                                    style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}
+                                    disabled={this.props.correct !== undefined}
+                                    onClick={() => { this.handleChooseButtonClick(color); }}
+                                >
+                                    {color.code}
+                                </button>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         );
     }
 
-    private get isCollect() {
-        return this.state.choosen != null && this.state.choosen.code === this.props.answer.code;
-    }
-
-    private onClickHandle(color: Color) {
-        this.setState({
-            choosen: color
-        })
-    }
-
-    private handleNextQuizButton() {
-        const correct = this.isCollect;
-        this.setState({
-            choosen: undefined
-        });
-        this.props.onQuizEnd(correct);
+    private handleChooseButtonClick(color: Color) {
+        this.props.onAnswer(color.code === this.props.answer.code);
     }
 }
