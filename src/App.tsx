@@ -3,7 +3,7 @@ import './App.css';
 import WhichCode from './quiz/WhichCode';
 import WhichColor from './quiz/WhichColor';
 import { Random, shuffle } from './Utils';
-import { colors, Color } from './quiz/colors';
+import { colors, Color, tones, hues } from './quiz/colors';
 import WhichIsTheXads, { WhichIsTheXadsQuiz } from './quiz/WhichIsTheXads';
 
 type Quiz = WhichIsTheXadsQuiz | WhichCodeQuiz | WhichColorQuiz;
@@ -75,19 +75,36 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 
+  private sample<T>(array: ReadonlyArray<T>): T {
+    return array[this.random.nextInt(array.length)];
+  }
+
   private generateNewQuiz(): Quiz {
     const quizType = "WhichIsTheXadsQuiz";//this.random.nextInt(2);
-    const choices = shuffle(colors, this.random).slice(0, 4);
-    const answer = choices[this.random.nextInt(choices.length)];
+    // const choices = shuffle(colors, this.random).slice(0, 4);
+    // const answer = choices[this.random.nextInt(choices.length)];
+    const answerHue = this.sample(hues);
+    const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
+    const complexHue = getComplexHue(answerHue);
+    const toSomeColor = (hue: number) => {
+      const code = tones[this.random.nextInt(tones.length)] + hue;
+      return colors.find(x => x.code == code)!
+    };
+    const randomColors = () => {
+      const hue = this.sample(hues);
+      const c = getComplexHue(hue);
+      const pair = this.sample(hues.filter(x => x !== c));
+      return [hue, pair].map(toSomeColor);
+    };
+    const answer = { key: "answer", colors: [answerHue, complexHue].map(toSomeColor) };
+    const choices = [...Array(3)].map((_, i) => i)
+      .map(x => ({ key: x.toString(), colors: randomColors() }))
+      .concat(answer);
+
     return {
       type: quizType,
-      choices: [
-        { key: "1", colors: [colors[0], colors[1]] },
-        { key: "2", colors: [colors[2], colors[3]] },
-        { key: "3", colors: [colors[4], colors[5]] },
-        { key: "4", colors: [colors[6], colors[7]] },
-      ],
-      answer: "2"
+      choices: shuffle(choices, this.random),
+      answer: "answer"
       // correct: undefined,
       // fourColors: {
       //   choices,
