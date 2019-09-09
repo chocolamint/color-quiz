@@ -1,5 +1,6 @@
 import React from "react";
 import { Color } from "./colors";
+import { blackOrWhite } from "../Utils";
 
 export interface WhichIsTheXadsQuiz {
     type: "WhichIsTheXadsQuiz",
@@ -28,12 +29,12 @@ export default class WhichIsTheXads extends React.Component<WhichIsTheXadsProps>
                 </div>
                 <div className="choices">
                     {this.props.quiz.choices.map(tuple => {
-
                         return (
                             <div key={tuple.key} className="choice">
                                 <div className="colors">
                                     {tuple.colors.map(color => (
-                                        <div className="color" style={{ background: color.color }}>
+                                        <div className="color" style={{ background: color.color, color: blackOrWhite(color.color) }}>
+                                            {(this.props.correct === undefined) ? "" : color.code}
                                         </div>
                                     ))}
                                 </div>
