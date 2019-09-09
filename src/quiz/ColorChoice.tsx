@@ -2,16 +2,16 @@ import React from 'react';
 import { Color } from './colors';
 import { blackOrWhite } from '../Utils';
 
-interface WhichColorProps {
+interface ColorChoiceProps {
     choices: Color[];
     answer: Color;
     correct?: boolean;
     onAnswer: (correct: boolean) => void;
 }
 
-export default class WhichColor extends React.Component<WhichColorProps> {
+export default class ColorChoice extends React.Component<ColorChoiceProps> {
 
-    public constructor(props: WhichColorProps) {
+    public constructor(props: ColorChoiceProps) {
         super(props);
     }
 
@@ -20,7 +20,7 @@ export default class WhichColor extends React.Component<WhichColorProps> {
         const answerColor = this.props.correct === undefined ? "transparent" : this.props.answer.color;
 
         return (
-            <div className="which-color">
+            <div className="color-choice">
                 <div className="question">
                     <div className="color" style={{ color: blackOrWhite(answerColor), background: answerColor }}>
                         {this.props.answer.code}

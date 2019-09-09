@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 import WhichCode from './quiz/WhichCode';
-import WhichColor from './quiz/WhichColor';
+import ColorChoice from './quiz/ColorChoice';
 import { Random, shuffle } from './Utils';
 import { colors, Color, tones, hues } from './quiz/colors';
 import WhichIsTheXads, { WhichIsTheXadsQuiz } from './quiz/WhichIsTheXads';
 
-type Quiz = WhichIsTheXadsQuiz | WhichCodeQuiz | WhichColorQuiz;
+type Quiz = WhichIsTheXadsQuiz | WhichCodeQuiz | ColorChoiceQuiz;
 
 interface WhichCodeQuiz {
   type: "WhichCodeQuiz",
@@ -14,8 +14,8 @@ interface WhichCodeQuiz {
   answer: Color;
 }
 
-interface WhichColorQuiz {
-  type: "WhichColorQuiz",
+interface ColorChoiceQuiz {
+  type: "ColorChoiceQuiz",
   choices: Color[];
   answer: Color;
 }
@@ -54,8 +54,8 @@ export default class App extends React.Component<{}, AppState> {
             switch (this.state.quiz.type) {
               case "WhichCodeQuiz":
                 return <WhichCode choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
-              case "WhichColorQuiz":
-                return <WhichColor choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+              case "ColorChoiceQuiz":
+                return <ColorChoice choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
               case "WhichIsTheXadsQuiz":
                 return <WhichIsTheXads quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
             }
@@ -82,7 +82,7 @@ export default class App extends React.Component<{}, AppState> {
   private generateNewQuiz(): Quiz {
     const generateQuiz = this.sample([
       this.generateCodeQuiz.bind(this),
-      this.generateColorQuiz.bind(this),
+      this.generateColorChoiceQuiz.bind(this),
       this.generateXadsQuiz.bind(this)
     ]);
 
@@ -99,11 +99,11 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
-  private generateColorQuiz(): WhichColorQuiz {
+  private generateColorChoiceQuiz(): ColorChoiceQuiz {
     const choices = shuffle(colors, this.random).slice(0, 4);
     const answer = this.sample(choices);
     return {
-      type: "WhichColorQuiz",
+      type: "ColorChoiceQuiz",
       choices: shuffle(choices, this.random),
       answer: answer
     };
