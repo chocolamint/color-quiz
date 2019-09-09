@@ -4,6 +4,9 @@ import WhichCode from './quiz/WhichCode';
 import WhichColor from './quiz/WhichColor';
 import { Random, shuffle } from './Utils';
 import { colors, Color } from './quiz/colors';
+import WhichIsTheXads, { WhichIsTheXadsQuiz } from './quiz/WhichIsTheXads';
+
+type Quiz = WhichIsTheXadsQuiz;
 
 interface AppState {
   quizType: number;
@@ -13,7 +16,8 @@ interface AppState {
   fourColors: {
     choices: Color[];
     answer: Color;
-  }
+  },
+  quizWhichDyads: Quiz
 }
 
 export default class App extends React.Component<{}, AppState> {
@@ -40,6 +44,7 @@ export default class App extends React.Component<{}, AppState> {
         </header>
         <main className="main">
           {(() => {
+            return <WhichIsTheXads quiz={this.state.quizWhichDyads} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
             switch (this.state.quizType) {
               case 0:
                 return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
@@ -72,6 +77,15 @@ export default class App extends React.Component<{}, AppState> {
       fourColors: {
         choices,
         answer
+      },
+      quizWhichDyads: {
+        choices: [
+          { key: "1", colors: [colors[0], colors[1]] },
+          { key: "2", colors: [colors[2], colors[3]] },
+          { key: "3", colors: [colors[4], colors[5]] },
+          { key: "4", colors: [colors[6], colors[7]] },
+        ],
+        answer: "2"
       }
     };
   }

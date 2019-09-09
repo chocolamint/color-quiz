@@ -9,7 +9,7 @@ interface WhichColorProps {
     onAnswer: (correct: boolean) => void;
 }
 
-export default class WhichColor extends React.Component<WhichColorProps, {}> {
+export default class WhichColor extends React.Component<WhichColorProps> {
 
     public constructor(props: WhichColorProps) {
         super(props);

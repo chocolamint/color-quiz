@@ -1,0 +1,51 @@
+@import "./Quiz.scss";
+
+.which-dyads {
+
+    @include quiz();
+
+    .question {
+
+        @include question();
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+
+        .message {
+            font-size: 18px;
+        }
+    }
+
+    .choices {
+
+        @include choices();
+
+        .choice {
+
+            @include choice();
+            position: relative;
+
+            .colors {
+                @include choiceButton();
+                display: flex;
+                font-family: Consolas, Menlo;
+
+                .color {
+                    flex: 1;
+                }
+            }
+
+            .choice-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                border: none;
+                background: transparent;
+            }
+        }
+    }
+}

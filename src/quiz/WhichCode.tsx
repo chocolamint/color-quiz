@@ -9,7 +9,7 @@ interface WhichCodeProps {
     onAnswer: (correct: boolean) => void;
 }
 
-export default class WhichCode extends React.Component<WhichCodeProps, {}> {
+export default class WhichCode extends React.Component<WhichCodeProps> {
 
     public constructor(props: WhichCodeProps) {
         super(props);

@@ -4,6 +4,7 @@ import './index.scss';
 import './App.scss';
 import './quiz/WhichCode.scss';
 import './quiz/WhichColor.scss';
+import './quiz/WhichDyads.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
