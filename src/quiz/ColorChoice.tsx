@@ -77,6 +77,7 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
     }
 
     private handleChooseButtonClick(color: Color) {
-        this.props.onAnswer(color.code === this.props.quiz.answer.code);
+        const correct = color.code === this.props.quiz.answer.code;
+        this.props.onAnswer(correct);
     }
 }
