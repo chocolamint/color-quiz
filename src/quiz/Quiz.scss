@@ -1,3 +1,8 @@
+@mixin quiz {
+    @include flexContainer($flexDirection: column, $alignItems: stretch);
+    @include positionAbsolute();
+}
+
 @mixin question {
     flex: 1 1;
     position: relative;

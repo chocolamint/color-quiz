@@ -3,8 +3,7 @@
 
 .which-code {
 
-    @include flexContainer($flexDirection: column, $alignItems: stretch);
-    @include positionAbsolute();
+    @include quiz();
 
     .question {
 
