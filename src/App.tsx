@@ -3,9 +3,9 @@ import './App.css';
 import { Random, shuffle } from './Utils';
 import { colors, Color, tones, hues } from './quiz/colors';
 import ColorChoice, { ColorChoiceQuiz, ColorChoiceQuizSubType } from './quiz/ColorChoice';
-import WhichIsTheXads, { WhichIsTheXadsQuiz } from './quiz/WhichIsTheXads';
+import ColorScheme, { ColorSchemeQuiz } from './quiz/ColorScheme';
 
-type Quiz = WhichIsTheXadsQuiz | ColorChoiceQuiz;
+type Quiz = ColorSchemeQuiz | ColorChoiceQuiz;
 
 interface AppState {
   quiz: Quiz;
@@ -41,8 +41,8 @@ export default class App extends React.Component<{}, AppState> {
             switch (this.state.quiz.type) {
               case "ColorChoiceQuiz":
                 return <ColorChoice quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
-              case "WhichIsTheXadsQuiz":
-                return <WhichIsTheXads quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+              case "ColorSchemeQuiz":
+                return <ColorScheme quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
             }
           })()}
         </main>
@@ -86,7 +86,7 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
-  private generateXadsQuiz(): WhichIsTheXadsQuiz {
+  private generateXadsQuiz(): ColorSchemeQuiz {
     const answerHue = this.sample(hues);
     const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
     const complexHue = getComplexHue(answerHue);
@@ -111,7 +111,8 @@ export default class App extends React.Component<{}, AppState> {
       .concat(answer);
 
     return {
-      type: "WhichIsTheXadsQuiz",
+      type: "ColorSchemeQuiz",
+      subType: "Dyads",
       choices: shuffle(choices, this.random),
       answer: "answer"
     };

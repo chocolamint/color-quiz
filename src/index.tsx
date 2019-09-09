@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import './App.scss';
 import './quiz/ColorChoice.scss';
-import './quiz/WhichIsTheXads.scss';
+import './quiz/ColorScheme.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

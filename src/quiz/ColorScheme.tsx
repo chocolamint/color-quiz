@@ -2,18 +2,20 @@ import React from "react";
 import { Color } from "./colors";
 import { blackOrWhite } from "../Utils";
 
-export interface WhichIsTheXadsQuiz {
-    type: "WhichIsTheXadsQuiz",
+export type ColorSchemeQuizSubType = "Dyads";
+export interface ColorSchemeQuiz {
+    type: "ColorSchemeQuiz",
+    subType: ColorSchemeQuizSubType,
     choices: { key: string, colors: Color[] }[];
     answer: string;
 }
-interface WhichIsTheXadsProps {
-    quiz: WhichIsTheXadsQuiz;
+interface ColorSchemeProps {
+    quiz: ColorSchemeQuiz;
     correct?: boolean;
     onAnswer: (correct: boolean) => void;
 }
 
-export default class WhichIsTheXads extends React.Component<WhichIsTheXadsProps> {
+export default class ColorScheme extends React.Component<ColorSchemeProps> {
 
     render() {
         return (
