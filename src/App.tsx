@@ -80,9 +80,36 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   private generateNewQuiz(): Quiz {
-    const quizType = "WhichIsTheXadsQuiz";//this.random.nextInt(2);
-    // const choices = shuffle(colors, this.random).slice(0, 4);
-    // const answer = choices[this.random.nextInt(choices.length)];
+    const generateQuiz = this.sample([
+      this.generateCodeQuiz.bind(this),
+      this.generateColorQuiz.bind(this),
+      this.generateXadsQuiz.bind(this)
+    ]);
+
+    return generateQuiz();
+  }
+
+  private generateCodeQuiz(): WhichCodeQuiz {
+    const choices = shuffle(colors, this.random).slice(0, 4);
+    const answer = this.sample(choices);
+    return {
+      type: "WhichCodeQuiz",
+      choices: shuffle(choices, this.random),
+      answer: answer
+    };
+  }
+
+  private generateColorQuiz(): WhichColorQuiz {
+    const choices = shuffle(colors, this.random).slice(0, 4);
+    const answer = this.sample(choices);
+    return {
+      type: "WhichColorQuiz",
+      choices: shuffle(choices, this.random),
+      answer: answer
+    };
+  }
+
+  private generateXadsQuiz(): WhichIsTheXadsQuiz {
     const answerHue = this.sample(hues);
     const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
     const complexHue = getComplexHue(answerHue);
@@ -102,16 +129,9 @@ export default class App extends React.Component<{}, AppState> {
       .concat(answer);
 
     return {
-      type: quizType,
+      type: "WhichIsTheXadsQuiz",
       choices: shuffle(choices, this.random),
       answer: "answer"
-      // correct: undefined,
-      // fourColors: {
-      //   choices,
-      //   answer
-      // },
-      // quizWhichDyads: {
-      // }
     };
   }
 
@@ -120,6 +140,7 @@ export default class App extends React.Component<{}, AppState> {
     const correct = this.state.correct;
     this.setState({
       quiz,
+      correct: undefined,
       quizCount: this.state.quizCount + 1,
       correctCount: this.state.correctCount + (correct ? 1 : 0)
     });
