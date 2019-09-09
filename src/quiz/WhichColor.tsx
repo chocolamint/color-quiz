@@ -9,7 +9,7 @@ interface WhichColorProps {
     onAnswer: (correct: boolean) => void;
 }
 
-export default class WhichColor extends React.Component<WhichColorProps, {}> {
+export default class WhichColor extends React.Component<WhichColorProps> {
 
     public constructor(props: WhichColorProps) {
         super(props);
@@ -36,8 +36,10 @@ export default class WhichColor extends React.Component<WhichColorProps, {}> {
                 <div className="choices">
                     {this.props.choices.map(color => {
                         const buttonText = this.props.correct === undefined ? "" : color.code;
+                        const choiseClassNames = "choice" +
+                            ((this.props.correct !== undefined && this.props.answer === color) ? " answer" : "");
                         return (
-                            <div key={color.code} className="choice">
+                            <div key={color.code} className={choiseClassNames}>
                                 <button
                                     className="choice-button"
                                     style={{ background: color.color, color: blackOrWhite(color.color) }}

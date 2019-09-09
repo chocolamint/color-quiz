@@ -39,6 +39,10 @@
 
             @include choice();
 
+            &.answer {
+                @include answerEmphasisAnimation();
+            }
+
             .choice-button {
                 @include choiceButton();
                 font-family: Consolas, Menlo;

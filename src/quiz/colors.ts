@@ -1,4 +1,4 @@
-export const colors = [
+export const colors: ReadonlyArray<Color> = [
 
     // v
     { code: "v2", color: "#cd1f42" },
@@ -204,6 +204,9 @@ export const colors = [
     { code: "Gy-2.5", color: "#3c3c3c" },
     { code: "B", color: "#292929" },
 ];
+
+export const tones: ReadonlyArray<string> = ["v", "b", "dp", "lt", "sf", "d", "dk", "p", "ltg", "g", "dkg"];
+export const hues: ReadonlyArray<number> = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
 
 export interface Color {
     code: string,

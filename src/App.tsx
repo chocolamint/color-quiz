@@ -3,17 +3,28 @@ import './App.css';
 import WhichCode from './quiz/WhichCode';
 import WhichColor from './quiz/WhichColor';
 import { Random, shuffle } from './Utils';
-import { colors, Color } from './quiz/colors';
+import { colors, Color, tones, hues } from './quiz/colors';
+import WhichIsTheXads, { WhichIsTheXadsQuiz } from './quiz/WhichIsTheXads';
+
+type Quiz = WhichIsTheXadsQuiz | WhichCodeQuiz | WhichColorQuiz;
+
+interface WhichCodeQuiz {
+  type: "WhichCodeQuiz",
+  choices: Color[];
+  answer: Color;
+}
+
+interface WhichColorQuiz {
+  type: "WhichColorQuiz",
+  choices: Color[];
+  answer: Color;
+}
 
 interface AppState {
-  quizType: number;
-  quizCount: number;
+  quiz: Quiz;
   correct?: boolean;
+  quizCount: number;
   correctCount: number;
-  fourColors: {
-    choices: Color[];
-    answer: Color;
-  }
 }
 
 export default class App extends React.Component<{}, AppState> {
@@ -25,7 +36,7 @@ export default class App extends React.Component<{}, AppState> {
 
     const quiz = this.generateNewQuiz();
     this.state = {
-      ...quiz,
+      quiz,
       correct: undefined,
       quizCount: 0,
       correctCount: 0
@@ -40,11 +51,13 @@ export default class App extends React.Component<{}, AppState> {
         </header>
         <main className="main">
           {(() => {
-            switch (this.state.quizType) {
-              case 0:
-                return <WhichCode choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
-              case 1:
-                return <WhichColor choices={this.state.fourColors.choices} answer={this.state.fourColors.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+            switch (this.state.quiz.type) {
+              case "WhichCodeQuiz":
+                return <WhichCode choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+              case "WhichColorQuiz":
+                return <WhichColor choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+              case "WhichIsTheXadsQuiz":
+                return <WhichIsTheXads quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
             }
           })()}
         </main>
@@ -62,17 +75,68 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 
-  private generateNewQuiz() {
-    const quizType = this.random.nextInt(2);
+  private sample<T>(array: ReadonlyArray<T>): T {
+    return array[this.random.nextInt(array.length)];
+  }
+
+  private generateNewQuiz(): Quiz {
+    const generateQuiz = this.sample([
+      this.generateCodeQuiz.bind(this),
+      this.generateColorQuiz.bind(this),
+      this.generateXadsQuiz.bind(this)
+    ]);
+
+    return generateQuiz();
+  }
+
+  private generateCodeQuiz(): WhichCodeQuiz {
     const choices = shuffle(colors, this.random).slice(0, 4);
-    const answer = choices[this.random.nextInt(choices.length)];
+    const answer = this.sample(choices);
     return {
-      quizType,
-      correct: undefined,
-      fourColors: {
-        choices,
-        answer
+      type: "WhichCodeQuiz",
+      choices: shuffle(choices, this.random),
+      answer: answer
+    };
+  }
+
+  private generateColorQuiz(): WhichColorQuiz {
+    const choices = shuffle(colors, this.random).slice(0, 4);
+    const answer = this.sample(choices);
+    return {
+      type: "WhichColorQuiz",
+      choices: shuffle(choices, this.random),
+      answer: answer
+    };
+  }
+
+  private generateXadsQuiz(): WhichIsTheXadsQuiz {
+    const answerHue = this.sample(hues);
+    const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
+    const complexHue = getComplexHue(answerHue);
+    const toSomeColor = (hue: number) => {
+      const code = tones[this.random.nextInt(tones.length)] + hue;
+      return colors.find(x => x.code === code)!
+    };
+    const randomColors = () => {
+      while (true) {
+        const hue = this.sample(hues);
+        const c = getComplexHue(hue);
+        const pair = this.sample(hues.filter(x => x !== c));
+        const result = [hue, pair].map(toSomeColor);
+        // 偶然同じ色になってしまったらもう1回
+        if (result[0].code === result[1].code) continue;
+        return result;
       }
+    };
+    const answer = { key: "answer", colors: [answerHue, complexHue].map(toSomeColor) };
+    const choices = [...Array(3)].map((_, i) => i)
+      .map(x => ({ key: x.toString(), colors: randomColors() }))
+      .concat(answer);
+
+    return {
+      type: "WhichIsTheXadsQuiz",
+      choices: shuffle(choices, this.random),
+      answer: "answer"
     };
   }
 
@@ -80,7 +144,8 @@ export default class App extends React.Component<{}, AppState> {
     const quiz = this.generateNewQuiz();
     const correct = this.state.correct;
     this.setState({
-      ...quiz,
+      quiz,
+      correct: undefined,
       quizCount: this.state.quizCount + 1,
       correctCount: this.state.correctCount + (correct ? 1 : 0)
     });

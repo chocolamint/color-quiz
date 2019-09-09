@@ -30,7 +30,7 @@ export class Random {
     }
 }
 
-export function shuffle<T>(array: T[], random: Random): T[] {
+export function shuffle<T>(array: ReadonlyArray<T>, random: Random): T[] {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = random.nextInt(i + 1);

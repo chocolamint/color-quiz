@@ -35,6 +35,10 @@
 
             @include choice();
 
+            &.answer {
+                @include answerEmphasisAnimation();
+            }
+
             .choice-button {
                 @include choiceButton();
                 border: solid 1px #999999;
