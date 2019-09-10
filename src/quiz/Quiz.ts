@@ -1,9 +1,18 @@
 import { PccsColor } from "./PccsColors";
+import { blackOrWhite } from "../Utils";
 
 export interface QuizComponentProps {
     message: string;
     quizStatus: QuizStatus;
     onAnswer: (correct: boolean) => void;
+}
+
+export function drawBackground(color: string | PccsColor) {
+    const hexCode = typeof color === "string" ? color : color.hexCode;
+    return {
+        color: blackOrWhite(hexCode),
+        backgroundColor: hexCode
+    };
 }
 
 export type Quiz = ColorSchemeQuiz | ColorChoiceQuiz;

@@ -1,6 +1,6 @@
 import React from "react";
 import { blackOrWhite } from "../Utils";
-import { QuizComponentProps, QuizStatus, ColorSchemeQuiz } from "./Quiz";
+import { QuizComponentProps, QuizStatus, ColorSchemeQuiz, drawBackground } from "./Quiz";
 
 interface ColorSchemeProps extends QuizComponentProps {
     quiz: ColorSchemeQuiz;
@@ -33,7 +33,7 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
                             <div key={i} className={choiseClassNames}>
                                 <div className="colors">
                                     {choice.map(color => (
-                                        <div key={color.pccsCode} className="color" style={{ background: color.hexCode, color: blackOrWhite(color.hexCode) }}>
+                                        <div key={color.pccsCode} className="color" style={drawBackground(color)}>
                                             {(status === QuizStatus.Thinking) ? "" : color.pccsCode}
                                         </div>
                                     ))}
