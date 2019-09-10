@@ -33,8 +33,8 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
                             <div key={choice.key} className={choiseClassNames}>
                                 <div className="colors">
                                     {choice.colors.map(color => (
-                                        <div className="color" style={{ background: color.color, color: blackOrWhite(color.color) }}>
-                                            {(status === QuizStatus.Thinking) ? "" : color.code}
+                                        <div key={color.pccsCode} className="color" style={{ background: color.hexCode, color: blackOrWhite(color.hexCode) }}>
+                                            {(status === QuizStatus.Thinking) ? "" : color.pccsCode}
                                         </div>
                                     ))}
                                 </div>

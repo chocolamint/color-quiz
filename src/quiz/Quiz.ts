@@ -1,4 +1,4 @@
-import { Color } from "./PccsColors";
+import { PccsColor } from "./PccsColors";
 
 export interface QuizComponentProps {
     message: string;
@@ -12,8 +12,8 @@ export interface ColorChoiceQuiz {
     type: "ColorChoiceQuiz";
     subType: ColorChoiceQuizSubType;
     question: string;
-    choices: Color[];
-    answer: Color;
+    choices: PccsColor[];
+    answer: PccsColor;
 }
 export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
 
@@ -21,7 +21,7 @@ export interface ColorSchemeQuiz {
     type: "ColorSchemeQuiz";
     subType: ColorSchemeQuizSubType;
     question: string;
-    choices: { key: string, colors: Color[] }[];
+    choices: { key: string, colors: PccsColor[] }[];
     answer: string;
 }
 export type ColorSchemeQuizSubType = "Dyads";

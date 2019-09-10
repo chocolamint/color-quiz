@@ -1,5 +1,5 @@
 import { Random, shuffle as utilShuffle } from "../Utils";
-import { hues, tones, colors } from "./PccsColors";
+import { Pccs, HueNumber } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, ColorChoiceQuizSubType, Quiz } from "./Quiz";
 
 export type QuizGenerator = () => Quiz;
@@ -17,7 +17,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         const subTypes: ColorChoiceQuizSubType[] = ["ColorChoice", "CodeChoice"];
         const subType = sample(subTypes);
         const question = subType === "ColorChoice" ? "このコードはどの色？" : "この色はどれ？";
-        const choices = shuffle(colors).slice(0, 4);
+        const choices = shuffle(Pccs.colors).slice(0, 4);
         const answer = sample(choices);
 
         return {
@@ -29,21 +29,18 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         };
     }
     function generateXadsQuiz(): ColorSchemeQuiz {
-        const answerHue = sample(hues);
-        const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
+        const answerHue = sample(Pccs.hueNumbers);
+        const getComplexHue = (h: HueNumber) => (h > 12 ? h - 12 : h + 12) as HueNumber;
         const complexHue = getComplexHue(answerHue);
-        const toSomeColor = (hue: number) => {
-            const code = sample(tones) + hue;
-            return colors.find(x => x.code === code)!
-        };
+        const toSomeColor = (h: HueNumber) => Pccs.find(sample(Pccs.tones), h);
         const randomColors = () => {
             while (true) {
-                const hue = sample(hues);
+                const hue = sample(Pccs.hueNumbers);
                 const c = getComplexHue(hue);
-                const pair = sample(hues.filter(x => x !== c));
+                const pair = sample(Pccs.hueNumbers.filter(x => x !== c));
                 const result = [hue, pair].map(toSomeColor);
                 // 偶然同じ色になってしまったらもう1回
-                if (result[0].code === result[1].code) continue;
+                if (result[0].pccsCode === result[1].pccsCode) continue;
                 return result;
             }
         };
