@@ -1,4 +1,4 @@
-import { shuffle, Random, blackOrWhite } from "../Utils";
+import { shuffle, Random, blackOrWhite, range } from "../Utils";
 
 describe("Random", () => {
 
@@ -68,5 +68,26 @@ describe("blackOrWhite", () => {
     ])("returns sufficient contrast color", (color, expected) => {
         const actual = blackOrWhite(color);
         expect(actual).toBe(expected);
+    });
+});
+
+describe("range", () => {
+
+    test.each([
+        [1, [0]],
+        [2, [0, 1]],
+        [5, [0, 1, 2, 3, 4]],
+    ])("length", (count, expected) => {
+        const actual = range(0, count as number);
+        expect(actual).toEqual(expected);
+    });
+
+    test.each([
+        [1, [1, 2, 3, 4, 5]],
+        [2, [2, 3, 4, 5, 6]],
+        [5, [5, 6, 7, 8, 9]],
+    ])("start", (start, expected) => {
+        const actual = range(start as number, 5);
+        expect(actual).toEqual(expected);
     });
 });
