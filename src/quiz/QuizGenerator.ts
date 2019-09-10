@@ -39,7 +39,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         };
     }
     function generateXadsQuiz(): ColorSchemeQuiz {
-        const n = random.next(2) + 2 as 2 | 3;
+        const n = random.next(3) + 2 as 2 | 3 | 4;
         const answerHue = sample(Pccs.hueNumbers);
         const answerTuple = [answerHue, ...Pccs.xads(answerHue, n)].map(toSomeColor);
         const answerIndex = randomAnswer();
@@ -52,8 +52,8 @@ export function createQuizGenerator(random: Random): QuizGenerator {
 
         return {
             type: "ColorSchemeQuiz",
-            subType: n === 2 ? "Dyads" : "Triads",
-            question: `${n === 2 ? "ダイアード" : "トライアド"}配色はどれ？`,
+            subType: n === 2 ? "Dyads" : n === 3 ? "Triads" : "Tetrads",
+            question: `${n === 2 ? "ダイアード" : n === 3 ? "トライアド" : "テトラード"}配色はどれ？`,
             choices: choices,
             answer: answerIndex
         };
@@ -61,7 +61,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         function toSomeColor(h: HueNumber) {
             return Pccs.find(sample(Pccs.tones), h);
         }
-        function randomColors(n: 2 | 3) {
+        function randomColors(n: 2 | 3 | 4) {
             while (true) {
                 const hues = [sample(Pccs.hueNumbers)];
                 const noSelect = Pccs.xads(hues[0], n);

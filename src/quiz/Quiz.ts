@@ -27,7 +27,7 @@ export interface ColorChoiceQuiz {
 
 export interface ColorSchemeQuiz {
     type: "ColorSchemeQuiz";
-    subType: "Dyads" | "Triads";
+    subType: "Dyads" | "Triads" | "Tetrads";
     question: string;
     choices: PccsColor[][];
     answer: number;

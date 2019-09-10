@@ -1,3 +1,5 @@
+import { range } from "../Utils";
+
 const allColors = [
 
     // v
@@ -188,12 +190,9 @@ export const Pccs = {
     get hueNumbers() {
         return hueNumbers;
     },
-    xads(h: HueNumber, n: 2 | 3): HueNumber[] {
-        if (n === 2) {
-            return [addHue(h, 12)];
-        } else {
-            return [addHue(h, 8), addHue(h, 16)];
-        }
+    xads(h: HueNumber, n: 2 | 3 | 4): HueNumber[] {
+        const diff = 24 / n;
+        return range(1, n - 1).map(i => addHue(h, i * diff as HueNumber));
 
         function addHue(h: HueNumber, d: HueNumber) {
             return (h + d > 24 ? h - (24 - d) : h + d) as HueNumber;
