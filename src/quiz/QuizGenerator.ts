@@ -1,6 +1,6 @@
 import { Random, shuffle as utilShuffle, range } from "../Utils";
 import { Pccs, HueNumber } from "./PccsColors";
-import { ColorSchemeQuiz, ColorChoiceQuiz, ColorChoiceQuizSubType, Quiz } from "./Quiz";
+import { ColorSchemeQuiz, ColorChoiceQuiz, Quiz } from "./Quiz";
 
 type QuizType = Quiz["type"];
 export type QuizGenerator = <T extends QuizType, R extends Quiz>(type?: T)
@@ -24,7 +24,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
     }
 
     function generateColorChoiceQuiz(): ColorChoiceQuiz {
-        const subTypes: ColorChoiceQuizSubType[] = ["ColorChoice", "CodeChoice"];
+        const subTypes = ["ColorChoice", "CodeChoice"] as const;
         const subType = sample(subTypes);
         const question = subType === "ColorChoice" ? "このコードはどの色？" : "この色はどれ？";
         const choices = shuffle(Pccs.colors).slice(0, 4);

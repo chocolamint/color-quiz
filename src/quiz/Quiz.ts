@@ -19,21 +19,19 @@ export type Quiz = ColorSchemeQuiz | ColorChoiceQuiz;
 
 export interface ColorChoiceQuiz {
     type: "ColorChoiceQuiz";
-    subType: ColorChoiceQuizSubType;
+    subType: "ColorChoice" | "CodeChoice";
     question: string;
     choices: PccsColor[];
     answer: number;
 }
-export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
 
 export interface ColorSchemeQuiz {
     type: "ColorSchemeQuiz";
-    subType: ColorSchemeQuizSubType;
+    subType: "Dyads";
     question: string;
     choices: PccsColor[][];
     answer: number;
 }
-export type ColorSchemeQuizSubType = "Dyads";
 
 export enum QuizStatus {
     Thinking,
