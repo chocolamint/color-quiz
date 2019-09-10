@@ -1,5 +1,5 @@
 import { Random, shuffle as utilShuffle } from "../Utils";
-import { hues, tones, colors } from "./colors";
+import { hues, tones, colors } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, ColorChoiceQuizSubType, Quiz } from "./Quiz";
 
 export type QuizGenerator = () => Quiz;

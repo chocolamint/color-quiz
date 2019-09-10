@@ -1,5 +1,5 @@
 import React from 'react';
-import { Color } from './colors';
+import { Color } from './PccsColors';
 import { blackOrWhite } from '../Utils';
 import { QuizComponentProps, QuizStatus, ColorChoiceQuiz } from './Quiz';
 

@@ -1,4 +1,4 @@
-import { Color } from "./colors";
+import { Color } from "./PccsColors";
 
 export interface QuizComponentProps {
     message: string;
