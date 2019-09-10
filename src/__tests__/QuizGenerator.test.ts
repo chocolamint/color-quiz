@@ -35,7 +35,7 @@ describe("createQuizGenerator", () => {
 
             expect(quiz).toEqual(expect.anything());
             expect(quiz.type).toBe("ColorSchemeQuiz");
-            expect(quiz.subType).toEqual(expect.any(String));
+            expect(quiz.subType).toEqual("Dyads");
             expect(quiz.question).toEqual(expect.any(String));
             expect(quiz.choices).toEqual(expect.any(Array));
             expect(quiz.choices[0]).toEqual(expect.any(Array));
@@ -44,7 +44,8 @@ describe("createQuizGenerator", () => {
         });
     });
 
-    test.each(range(0, 200))("answer is dyads (seed: %i)", (seed: number) => {
+    test.each(range(0, 200)
+    )("answer is dyads (seed: %i)", (seed: number) => {
 
         const random = new Random(seed);
         const generator = createQuizGenerator(random);
@@ -63,7 +64,8 @@ describe("createQuizGenerator", () => {
         }
     });
 
-    test.each(range(0, 200))("pair color is different color (seed: %i)", (seed: number) => {
+    test.each(range(0, 200)
+    )("pair color is different color (seed: %i)", (seed: number) => {
 
         const random = new Random(seed);
         const generator = createQuizGenerator(random);
@@ -76,7 +78,8 @@ describe("createQuizGenerator", () => {
         }
     });
 
-    test.each(range(0, 200))("choices are unique (seed: %i)", (seed: number) => {
+    test.each(range(0, 200)
+    )("choices are unique (seed: %i)", (seed: number) => {
 
         const random = new Random(seed);
         const generator = createQuizGenerator(random);
