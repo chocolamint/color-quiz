@@ -15,7 +15,7 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
     public render() {
 
         const status = this.props.quizStatus;
-
+        document.querySelector("button");
         return (
             <div className="which-dyads">
                 <div className="question">

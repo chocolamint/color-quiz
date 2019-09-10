@@ -1,3 +1,5 @@
+import { range } from "../Utils";
+
 const allColors = [
 
     // v
@@ -188,17 +190,22 @@ export const Pccs = {
     get hueNumbers() {
         return hueNumbers;
     },
-    complex(h: HueNumber) {
-        return (h > 12 ? h - 12 : h + 12) as HueNumber
+    xads(h: HueNumber, n: 2 | 3 | 4): HueNumber[] {
+        const diff = 24 / n;
+        return range(1, n - 1).map(i => addHue(h, i * diff as HueNumber));
+
+        function addHue(h: HueNumber, d: HueNumber) {
+            return (h + d > 24 ? h - (24 - d) : h + d) as HueNumber;
+        }
     },
     find(tone: Tone, hueNumber: HueNumber) {
         const c = pccsCodeToColor.get(tone + hueNumber);
-        if (c == null) throw Error(`${tone}${hueNumber} not found.`);
+        if (c === undefined) throw Error(`${tone}${hueNumber} not found.`);
         return c;
     },
     deconstruct(pccsCode: string) {
         const match = chromaticColorRegExp.exec(pccsCode);
-        if (match == null) throw Error(`${pccsCode} is invalid.`);
+        if (match === null) throw Error(`${pccsCode} is invalid.`);
         return { tone: match[1] as Tone, hueNumber: Number(match[2]) as HueNumber };
     },
 };

@@ -1,4 +1,4 @@
-import { shuffle, Random, blackOrWhite, range } from "../Utils";
+import { shuffle, Random, blackOrWhite, range, isUnique, combination } from "../Utils";
 
 describe("Random", () => {
 
@@ -50,6 +50,49 @@ describe("shuffle", () => {
     ])("shuffle array (seed: %i)", (seed, expected) => {
         const actual = shuffle(array, new Random(seed as number));
         expect(actual).toEqual(expected);
+    });
+});
+
+describe("isUnique", () => {
+
+    test("unique array", () => {
+
+        const array = [{ id: 0, name: "a" }, { id: 1, name: "b" }, { id: 2, name: "a" }];
+        expect(isUnique(array, x => x.id)).toBe(true);
+    });
+
+    test("not unique array", () => {
+
+        const array = [{ id: 0, name: "a" }, { id: 0, name: "b" }, { id: 2, name: "a" }];
+        expect(isUnique(array, x => x.id)).toBe(false);
+    });
+});
+
+describe("combination", () => {
+
+    test("pair", () => {
+
+        const c = combination([1, 2, 3, 4, 5], 2);
+
+        expect(c).toEqual([
+            [1, 2], [1, 3], [1, 4], [1, 5],
+            [2, 3], [2, 4], [2, 5],
+            [3, 4], [3, 5],
+            [4, 5]
+        ]);
+    });
+
+    test("triple", () => {
+
+        const c = combination([1, 2, 3, 4, 5], 3);
+
+        expect(c).toEqual([
+            [1, 2, 3], [1, 2, 4], [1, 2, 5],
+            [1, 3, 4], [1, 3, 5],
+            [1, 4, 5],
+            [2, 3, 4], [2, 3, 5], [2, 4, 5],
+            [3, 4, 5]
+        ]);
     });
 });
 
