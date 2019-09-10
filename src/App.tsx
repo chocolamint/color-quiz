@@ -1,43 +1,33 @@
 import React from 'react';
 import './App.css';
-import WhichCode from './quiz/WhichCode';
-import WhichColor from './quiz/WhichColor';
-import { Random, shuffle } from './Utils';
-import { colors, Color, tones, hues } from './quiz/colors';
-import WhichIsTheXads, { WhichIsTheXadsQuiz } from './quiz/WhichIsTheXads';
+import { Random } from './Utils';
+import ColorChoice from './quiz/ColorChoice';
+import ColorScheme from './quiz/ColorScheme';
+import { QuizStatus, Quiz } from './quiz/Quiz';
+import { createQuizGenerator, QuizGenerator } from './quiz/QuizGenerator';
 
-type Quiz = WhichIsTheXadsQuiz | WhichCodeQuiz | WhichColorQuiz;
-
-interface WhichCodeQuiz {
-  type: "WhichCodeQuiz",
-  choices: Color[];
-  answer: Color;
-}
-
-interface WhichColorQuiz {
-  type: "WhichColorQuiz",
-  choices: Color[];
-  answer: Color;
-}
 
 interface AppState {
   quiz: Quiz;
-  correct?: boolean;
+  message: string;
+  quizStatus: QuizStatus;
   quizCount: number;
   correctCount: number;
 }
 
 export default class App extends React.Component<{}, AppState> {
 
-  private random = new Random();
+  private generateQuiz: QuizGenerator;
 
   public constructor(props: {}) {
     super(props);
 
-    const quiz = this.generateNewQuiz();
+    this.generateQuiz = createQuizGenerator(new Random());
+    const quiz = this.generateQuiz();
     this.state = {
       quiz,
-      correct: undefined,
+      message: "",
+      quizStatus: QuizStatus.Thinking,
       quizCount: 0,
       correctCount: 0
     };
@@ -52,18 +42,16 @@ export default class App extends React.Component<{}, AppState> {
         <main className="main">
           {(() => {
             switch (this.state.quiz.type) {
-              case "WhichCodeQuiz":
-                return <WhichCode choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
-              case "WhichColorQuiz":
-                return <WhichColor choices={this.state.quiz.choices} answer={this.state.quiz.answer} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
-              case "WhichIsTheXadsQuiz":
-                return <WhichIsTheXads quiz={this.state.quiz} correct={this.state.correct} onAnswer={e => this.handleAnswer(e)} />
+              case "ColorChoiceQuiz":
+                return <ColorChoice quiz={this.state.quiz} message={this.state.message} quizStatus={this.state.quizStatus} onAnswer={e => this.handleAnswer(e)} />
+              case "ColorSchemeQuiz":
+                return <ColorScheme quiz={this.state.quiz} message={this.state.message} quizStatus={this.state.quizStatus} onAnswer={e => this.handleAnswer(e)} />
             }
           })()}
         </main>
         <footer className="footer">
           <div className="control-buttons">
-            <button className="next-quiz-button" disabled={this.state.correct === undefined} onClick={() => this.handleNextQuizButton()}>
+            <button className="next-quiz-button" disabled={this.state.quizStatus === QuizStatus.Thinking} onClick={() => this.handleNextQuizButton()}>
               次のクイズへ
           </button>
           </div>
@@ -75,85 +63,21 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 
-  private sample<T>(array: ReadonlyArray<T>): T {
-    return array[this.random.nextInt(array.length)];
-  }
-
-  private generateNewQuiz(): Quiz {
-    const generateQuiz = this.sample([
-      this.generateCodeQuiz.bind(this),
-      this.generateColorQuiz.bind(this),
-      this.generateXadsQuiz.bind(this)
-    ]);
-
-    return generateQuiz();
-  }
-
-  private generateCodeQuiz(): WhichCodeQuiz {
-    const choices = shuffle(colors, this.random).slice(0, 4);
-    const answer = this.sample(choices);
-    return {
-      type: "WhichCodeQuiz",
-      choices: shuffle(choices, this.random),
-      answer: answer
-    };
-  }
-
-  private generateColorQuiz(): WhichColorQuiz {
-    const choices = shuffle(colors, this.random).slice(0, 4);
-    const answer = this.sample(choices);
-    return {
-      type: "WhichColorQuiz",
-      choices: shuffle(choices, this.random),
-      answer: answer
-    };
-  }
-
-  private generateXadsQuiz(): WhichIsTheXadsQuiz {
-    const answerHue = this.sample(hues);
-    const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
-    const complexHue = getComplexHue(answerHue);
-    const toSomeColor = (hue: number) => {
-      const code = tones[this.random.nextInt(tones.length)] + hue;
-      return colors.find(x => x.code === code)!
-    };
-    const randomColors = () => {
-      while (true) {
-        const hue = this.sample(hues);
-        const c = getComplexHue(hue);
-        const pair = this.sample(hues.filter(x => x !== c));
-        const result = [hue, pair].map(toSomeColor);
-        // 偶然同じ色になってしまったらもう1回
-        if (result[0].code === result[1].code) continue;
-        return result;
-      }
-    };
-    const answer = { key: "answer", colors: [answerHue, complexHue].map(toSomeColor) };
-    const choices = [...Array(3)].map((_, i) => i)
-      .map(x => ({ key: x.toString(), colors: randomColors() }))
-      .concat(answer);
-
-    return {
-      type: "WhichIsTheXadsQuiz",
-      choices: shuffle(choices, this.random),
-      answer: "answer"
-    };
-  }
-
   private nextQuiz() {
-    const quiz = this.generateNewQuiz();
-    const correct = this.state.correct;
+    const quiz = this.generateQuiz();
     this.setState({
       quiz,
-      correct: undefined,
+      message: "",
+      quizStatus: QuizStatus.Thinking,
       quizCount: this.state.quizCount + 1,
-      correctCount: this.state.correctCount + (correct ? 1 : 0)
+      correctCount: this.state.correctCount + (this.state.quizStatus === QuizStatus.Correct ? 1 : 0)
     });
   }
 
   private handleAnswer(correct: boolean) {
     this.setState({
-      correct
+      message: correct ? "🎉正解！🎉" : "残念...😢",
+      quizStatus: correct ? QuizStatus.Correct : QuizStatus.Incorrect
     });
   }
 

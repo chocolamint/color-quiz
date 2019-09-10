@@ -1,6 +1,6 @@
 @import "./Quiz.scss";
 
-.which-code {
+.color-choice {
 
     @include quiz();
 
@@ -12,15 +12,19 @@
         flex-direction: column;
 
         .color {
-            display: flex;
             flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-size: 30px;
+            font-family: Consolas, Menlo;
         }
 
         .message {
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-content: center;
             height: $messageHeight;
             vertical-align: middle;
             font-size: 18px;
@@ -41,12 +45,8 @@
 
             .choice-button {
                 @include choiceButton();
-                border: solid 1px #999999;
                 font-family: Consolas, Menlo;
-
-                &:disabled {
-                    border: none;
-                }
+                border: none;
             }
         }
     }

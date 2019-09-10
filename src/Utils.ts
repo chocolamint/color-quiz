@@ -47,3 +47,7 @@ export function blackOrWhite(hexcolor: string): "white" | "black" {
 
     return ((((r * 299) + (g * 587) + (b * 114)) / 1000) < 128) ? "white" : "black";
 }
+
+export function range(start: number, count: number): number[] {
+    return [...Array(count)].map((_, i) => i + start);
+}
