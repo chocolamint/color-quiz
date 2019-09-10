@@ -3,8 +3,8 @@ import { Pccs, HueNumber } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, Quiz } from "./Quiz";
 
 type QuizType = Quiz["type"];
-export type QuizGenerator = <T extends QuizType, R extends Quiz>(type?: T)
-    => T extends undefined ? Quiz : (R extends { type: T } ? R : never);
+export type QuizGenerator = <T extends QuizType>(type?: T)
+    => undefined extends T ? Quiz : Extract<Quiz, { type: T }>;
 
 export function createQuizGenerator(random: Random): QuizGenerator {
 
@@ -93,10 +93,8 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         }
     }
 
-    return function <T extends QuizType, R extends Quiz>(type?: T)
-        : T extends undefined ? Quiz : (R extends { type: T } ? R : never) {
+    return function <T extends QuizType>(type?: T): undefined extends T ? Quiz : Extract<Quiz, { type: T }> {
         const generateQuiz = selectGenerator(type);
-        // コンパイル通せない…
         return generateQuiz() as any;
     };
 }
