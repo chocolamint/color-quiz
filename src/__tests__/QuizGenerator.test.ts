@@ -1,5 +1,6 @@
-import { Random } from "../Utils";
+import { Random, range } from "../Utils";
 import { createQuizGenerator } from "../quiz/QuizGenerator";
+import { Pccs } from "../quiz/PccsColors";
 
 describe("createQuizGenerator", () => {
 
@@ -40,5 +41,24 @@ describe("createQuizGenerator", () => {
             expect(quiz.choices[0][0]).toHaveProperty("pccsCode");
             expect(quiz.answer).toEqual(expect.any(Number));
         });
+    });
+
+    test.each(range(0, 200))("answer is dyads (seed: %i)", (seed: number) => {
+
+        const random = new Random(seed);
+        const generator = createQuizGenerator(random);
+
+        const quiz = generator("ColorSchemeQuiz");
+
+        for (const [index, [a, b]] of quiz.choices.entries()) {
+            const ha = Pccs.deconstruct(a.pccsCode)!;
+            const hb = Pccs.deconstruct(b.pccsCode)!;
+            const hueDiff = Math.abs(ha.hueNumber - hb.hueNumber);
+            if (index === quiz.answer) {
+                expect(hueDiff).toBe(12);
+            } else {
+                expect(hueDiff).not.toBe(12);
+            }
+        }
     });
 });

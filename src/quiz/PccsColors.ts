@@ -235,7 +235,12 @@ export const Pccs = {
         const c = pccsCodeToColor.get(tone + hueNumber);
         if (c == null) throw Error(`${tone}${hueNumber} not found.`);
         return c;
-    }
+    },
+    deconstruct(pccsCode: string) {
+        const match = regexp.exec(pccsCode);
+        if (match == null) return undefined;
+        return { tone: match[1], hueNumber: Number(match[2]) };
+    },
 };
 
 export interface PccsColor {
