@@ -1,5 +1,4 @@
 import React from "react";
-import { blackOrWhite } from "../Utils";
 import { QuizComponentProps, QuizStatus, ColorSchemeQuiz, drawBackground } from "./Quiz";
 
 interface ColorSchemeProps extends QuizComponentProps {
