@@ -75,4 +75,15 @@ describe("createQuizGenerator", () => {
             expect(distinct.size).toEqual(choice.length);
         }
     });
+
+    test.each(range(0, 200))("choices are unique (seed: %i)", (seed: number) => {
+
+        const random = new Random(seed);
+        const generator = createQuizGenerator(random);
+
+        const quiz = generator("ColorSchemeQuiz");
+
+        const distinct = new Set(quiz.choices.map(x => x.map(x => x.pccsCode).sort().join(",")));
+        expect(distinct.size).toBe(4);
+    });
 });

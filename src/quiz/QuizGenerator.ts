@@ -59,6 +59,11 @@ export function createQuizGenerator(random: Random): QuizGenerator {
             answer, answerPair
         );
 
+        // 偶然同じ色の組み合わせが複数できてしまったらもう1回
+        if (new Set(choices.map(x => x.map(y => y.pccsCode).sort().join(","))).size !== 4) {
+            return generateXadsQuiz();
+        }
+
         return {
             type: "ColorSchemeQuiz",
             subType: "Dyads",
