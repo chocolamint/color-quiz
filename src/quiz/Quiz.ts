@@ -13,7 +13,7 @@ export interface ColorChoiceQuiz {
     subType: ColorChoiceQuizSubType;
     question: string;
     choices: PccsColor[];
-    answer: PccsColor;
+    answer: number;
 }
 export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
 
@@ -21,8 +21,8 @@ export interface ColorSchemeQuiz {
     type: "ColorSchemeQuiz";
     subType: ColorSchemeQuizSubType;
     question: string;
-    choices: { key: string, colors: PccsColor[] }[];
-    answer: string;
+    choices: PccsColor[][];
+    answer: number;
 }
 export type ColorSchemeQuizSubType = "Dyads";
 

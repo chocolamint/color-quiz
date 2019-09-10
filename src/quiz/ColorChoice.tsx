@@ -1,5 +1,4 @@
 import React from 'react';
-import { PccsColor } from './PccsColors';
 import { blackOrWhite } from '../Utils';
 import { QuizComponentProps, QuizStatus, ColorChoiceQuiz } from './Quiz';
 
@@ -18,13 +17,13 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
 
         const quiz = this.props.quiz;
         const status = this.props.quizStatus;
-        const answerColor = status === QuizStatus.Thinking && quiz.subType === "ColorChoice" ? "transparent" : quiz.answer.hexCode;
+        const answerColor = status === QuizStatus.Thinking && quiz.subType === "ColorChoice" ? "transparent" : quiz.choices[quiz.answer].hexCode;
 
         return (
             <div className="color-choice">
                 <div className="question">
                     <div className="color" style={{ color: blackOrWhite(answerColor), background: answerColor }}>
-                        {quiz.subType === "CodeChoice" && status === QuizStatus.Thinking ? "" : quiz.answer.pccsCode}
+                        {quiz.subType === "CodeChoice" && status === QuizStatus.Thinking ? "" : quiz.choices[quiz.answer].pccsCode}
                     </div>
                     <div className="message">
                         {quiz.question}<br />
@@ -32,18 +31,18 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
                     </div>
                 </div>
                 <div className="choices">
-                    {quiz.choices.map(color => {
+                    {quiz.choices.map((color, i) => {
                         const buttonText = status === QuizStatus.Thinking && quiz.subType === "ColorChoice" ? "" : color.pccsCode;
                         const buttonBackground = status === QuizStatus.Thinking && quiz.subType === "CodeChoice" ? "#ffffff" : color.hexCode;
                         const choiseClassNames = "choice" +
-                            ((status !== QuizStatus.Thinking && quiz.answer === color) ? " answer" : "");
+                            ((status !== QuizStatus.Thinking && i === quiz.answer) ? " answer" : "");
                         return (
                             <div key={color.pccsCode} className={choiseClassNames}>
                                 <button
                                     className="choice-button"
                                     style={{ background: buttonBackground, color: blackOrWhite(buttonBackground) }}
                                     disabled={status !== QuizStatus.Thinking}
-                                    onClick={() => { this.handleChooseButtonClick(color); }}
+                                    onClick={() => { this.handleChooseButtonClick(i); }}
                                 >
                                     {buttonText}
                                 </button>
@@ -55,8 +54,8 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
         );
     }
 
-    private handleChooseButtonClick(selected: PccsColor) {
-        const correct = selected.pccsCode === this.props.quiz.answer.pccsCode;
+    private handleChooseButtonClick(selected: number) {
+        const correct = selected === this.props.quiz.answer;
         this.props.onAnswer(correct);
     }
 }

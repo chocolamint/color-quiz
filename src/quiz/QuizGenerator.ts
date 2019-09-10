@@ -12,13 +12,21 @@ export function createQuizGenerator(random: Random): QuizGenerator {
     function shuffle<T>(array: ReadonlyArray<T>) {
         return utilShuffle(array, random);
     }
+    function randomAnswer() {
+        return random.nextInt(4) as 0 | 1 | 2 | 3;
+    }
+    function insertAt<T>(array: ReadonlyArray<T>, index: number, item: T) {
+        const copy = array.slice();
+        copy.splice(index, 0, item);
+        return copy;
+    }
 
     function generateColorChoiceQuiz(): ColorChoiceQuiz {
         const subTypes: ColorChoiceQuizSubType[] = ["ColorChoice", "CodeChoice"];
         const subType = sample(subTypes);
         const question = subType === "ColorChoice" ? "このコードはどの色？" : "この色はどれ？";
         const choices = shuffle(Pccs.colors).slice(0, 4);
-        const answer = sample(choices);
+        const answer = randomAnswer();
 
         return {
             type: "ColorChoiceQuiz",
@@ -42,17 +50,19 @@ export function createQuizGenerator(random: Random): QuizGenerator {
                 return pair;
             }
         };
-        const answer = { key: "answer", colors: [answerHue, complexHue].map(toSomeColor) };
-        const choices = [...Array(3)].map((_, i) => i)
-            .map(x => ({ key: x.toString(), colors: randomColors() }))
-            .concat(answer);
+        const answerPair = [answerHue, complexHue].map(toSomeColor);
+        const answer = randomAnswer();
+        const choices = insertAt(
+            [...Array(3)].map((_, i) => i).map(x => randomColors()),
+            answer, answerPair
+        );
 
         return {
             type: "ColorSchemeQuiz",
             subType: "Dyads",
             question: "ダイアード配色はどれ？",
             choices: shuffle(choices),
-            answer: "answer"
+            answer: answer
         };
     }
 

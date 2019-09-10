@@ -26,13 +26,13 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
                     </div>
                 </div>
                 <div className="choices">
-                    {this.props.quiz.choices.map(choice => {
+                    {this.props.quiz.choices.map((choice, i) => {
                         const choiseClassNames = "choice" +
-                            ((status !== QuizStatus.Thinking && this.props.quiz.answer === choice.key) ? " answer" : "");
+                            ((status !== QuizStatus.Thinking && i === this.props.quiz.answer) ? " answer" : "");
                         return (
-                            <div key={choice.key} className={choiseClassNames}>
+                            <div key={i} className={choiseClassNames}>
                                 <div className="colors">
-                                    {choice.colors.map(color => (
+                                    {choice.map(color => (
                                         <div key={color.pccsCode} className="color" style={{ background: color.hexCode, color: blackOrWhite(color.hexCode) }}>
                                             {(status === QuizStatus.Thinking) ? "" : color.pccsCode}
                                         </div>
@@ -41,7 +41,7 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
                                 <button
                                     className="choice-button"
                                     disabled={status !== QuizStatus.Thinking}
-                                    onClick={() => { this.handleChooseButtonClick(choice); }}
+                                    onClick={() => { this.handleChooseButtonClick(i); }}
                                 >
                                     &nbsp;
                                 </button>
@@ -53,8 +53,8 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
         );
     }
 
-    private handleChooseButtonClick(tuple: { key: string }) {
-        const correct = tuple.key === this.props.quiz.answer;
+    private handleChooseButtonClick(selected: number) {
+        const correct = selected === this.props.quiz.answer;
         this.props.onAnswer(correct);
     }
 }
