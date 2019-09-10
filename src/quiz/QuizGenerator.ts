@@ -2,18 +2,20 @@ import { Random, shuffle as utilShuffle, range } from "../Utils";
 import { Pccs, HueNumber } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, ColorChoiceQuizSubType, Quiz } from "./Quiz";
 
-export type QuizGenerator = () => Quiz;
+type QuizType = Quiz["type"];
+export type QuizGenerator = <T extends QuizType, R extends Quiz>(type?: T)
+    => T extends undefined ? Quiz : (R extends { type: T } ? R : never);
 
 export function createQuizGenerator(random: Random): QuizGenerator {
 
     function sample<T>(array: ReadonlyArray<T>) {
-        return array[random.nextInt(array.length)];
+        return array[random.next(array.length)];
     }
     function shuffle<T>(array: ReadonlyArray<T>) {
         return utilShuffle(array, random);
     }
     function randomAnswer() {
-        return random.nextInt(4) as 0 | 1 | 2 | 3;
+        return random.next(4) as 0 | 1 | 2 | 3;
     }
     function insertAt<T>(array: ReadonlyArray<T>, index: number, item: T) {
         const copy = array.slice();
@@ -57,6 +59,11 @@ export function createQuizGenerator(random: Random): QuizGenerator {
             answer, answerPair
         );
 
+        // 偶然同じ色の組み合わせが複数できてしまったらもう1回
+        if (new Set(choices.map(x => x.map(y => y.pccsCode).sort().join(","))).size !== 4) {
+            return generateXadsQuiz();
+        }
+
         return {
             type: "ColorSchemeQuiz",
             subType: "Dyads",
@@ -71,8 +78,25 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         generateXadsQuiz
     ];
 
-    return function (): Quiz {
-        const generateQuiz = sample(generators);
-        return generateQuiz();
+    const selectGenerator = (type?: QuizType): () => Quiz => {
+        if (type === undefined) {
+            return sample(generators);
+        } else {
+            switch (type) {
+                case "ColorChoiceQuiz":
+                    return generateColorChoiceQuiz;
+                case "ColorSchemeQuiz":
+                    return generateXadsQuiz;
+                default:
+                    return type; // never
+            }
+        }
+    }
+
+    return function <T extends QuizType, R extends Quiz>(type?: T)
+        : T extends undefined ? Quiz : (R extends { type: T } ? R : never) {
+        const generateQuiz = selectGenerator(type);
+        // コンパイル通せない…
+        return generateQuiz() as any;
     };
 }
