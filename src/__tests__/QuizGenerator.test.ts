@@ -14,7 +14,6 @@ describe("createQuizGenerator", () => {
 
             expect(quiz).toEqual(expect.anything());
             expect(quiz.type).toBe("ColorChoiceQuiz");
-            if (quiz.type !== "ColorChoiceQuiz") throw Error(); // asserts ;-(
             expect(quiz.subType).toEqual(expect.any(String));
             expect(quiz.question).toEqual(expect.any(String));
             expect(quiz.choices).toEqual(expect.any(Array));
@@ -34,7 +33,6 @@ describe("createQuizGenerator", () => {
 
             expect(quiz).toEqual(expect.anything());
             expect(quiz.type).toBe("ColorSchemeQuiz");
-            if (quiz.type !== "ColorSchemeQuiz") throw Error(); // asserts ;-(
             expect(quiz.subType).toEqual(expect.any(String));
             expect(quiz.question).toEqual(expect.any(String));
             expect(quiz.choices).toEqual(expect.any(Array));
