@@ -1,4 +1,4 @@
-const allColors: ReadonlyArray<Readonly<PccsColor>> = [
+const allColors = [
 
     // v
     { pccsCode: "v2", hexCode: "#cd1f42" },
@@ -28,20 +28,6 @@ const allColors: ReadonlyArray<Readonly<PccsColor>> = [
     { pccsCode: "b22", hexCode: "#9c5da0" },
     { pccsCode: "b24", hexCode: "#cc5c87" },
 
-    // s
-    // { pccsCode: "s2", hexCode: "#c13547" },
-    // { pccsCode: "s4", hexCode: "#c7512c" },
-    // { pccsCode: "s6", hexCode: "#db8b08" },
-    // { pccsCode: "s8", hexCode: "#d2b700" },
-    // { pccsCode: "s10", hexCode: "#9aa400" },
-    // { pccsCode: "s12", hexCode: "#008a52" },
-    // { pccsCode: "s14", hexCode: "#007b75" },
-    // { pccsCode: "s16", hexCode: "#006a8b" },
-    // { pccsCode: "s18", hexCode: "#005692" },
-    // { pccsCode: "s20", hexCode: "#4b488e" },
-    // { pccsCode: "s22", hexCode: "#753a7a" },
-    // { pccsCode: "s24", hexCode: "#a03663" },
-
     // dp
     { pccsCode: "dp2", hexCode: "#9f1b34" },
     { pccsCode: "dp4", hexCode: "#a53b1b" },
@@ -55,19 +41,6 @@ const allColors: ReadonlyArray<Readonly<PccsColor>> = [
     { pccsCode: "dp20", hexCode: "#343472" },
     { pccsCode: "dp22", hexCode: "#5a265f" },
     { pccsCode: "dp24", hexCode: "#811f4c" },
-
-    // { pccsCode: "lt2+", hexCode: "#f28c8e" },
-    // { pccsCode: "lt4+", hexCode: "#ff9e7d" },
-    // { pccsCode: "lt6+", hexCode: "#fcb869" },
-    // { pccsCode: "lt8+", hexCode: "#edd267" },
-    // { pccsCode: "lt10+", hexCode: "#caca61" },
-    // { pccsCode: "lt12+", hexCode: "#73c89c" },
-    // { pccsCode: "lt14+", hexCode: "#3faba4" },
-    // { pccsCode: "lt16+", hexCode: "#52a6bf" },
-    // { pccsCode: "lt18+", hexCode: "#6591c0" },
-    // { pccsCode: "lt20+", hexCode: "#8e87be" },
-    // { pccsCode: "lt22+", hexCode: "#ac7eae" },
-    // { pccsCode: "lt24+", hexCode: "#d98295" },
 
     // lt
     { pccsCode: "lt2", hexCode: "#f59fa0" },
@@ -124,19 +97,6 @@ const allColors: ReadonlyArray<Readonly<PccsColor>> = [
     { pccsCode: "dk20", hexCode: "#312e4d" },
     { pccsCode: "dk22", hexCode: "#422944" },
     { pccsCode: "dk24", hexCode: "#5d2d3f" },
-
-    // { pccsCode: "p2+", hexCode: "#e9b8b8" },
-    // { pccsCode: "p4+", hexCode: "#e9baaa" },
-    // { pccsCode: "p6+", hexCode: "#efccaa" },
-    // { pccsCode: "p8+", hexCode: "#efe0b5" },
-    // { pccsCode: "p10+", hexCode: "#d8d5a8" },
-    // { pccsCode: "p12+", hexCode: "#a5ceb6" },
-    // { pccsCode: "p14+", hexCode: "#9ecdc9" },
-    // { pccsCode: "p16+", hexCode: "#a5cad7" },
-    // { pccsCode: "p18+", hexCode: "#a8b7cd" },
-    // { pccsCode: "p20+", hexCode: "#b7b3cc" },
-    // { pccsCode: "p22+", hexCode: "#c4afc4" },
-    // { pccsCode: "p24+", hexCode: "#debbc6" },
 
     // p
     { pccsCode: "p2", hexCode: "#e8cbcb" },
@@ -203,29 +163,29 @@ const allColors: ReadonlyArray<Readonly<PccsColor>> = [
     { pccsCode: "Gy-3.5", hexCode: "#525252" },
     { pccsCode: "Gy-2.5", hexCode: "#3c3c3c" },
     { pccsCode: "B", hexCode: "#292929" },
-];
+] as const;
+export type PccsColor = typeof allColors[number];
 
-const tones: ReadonlyArray<Tone> = ["v", "b", "dp", "lt", "sf", "d", "dk", "p", "ltg", "g", "dkg"];
-const hueNumbers: ReadonlyArray<HueNumber> = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
+const tones = ["v", "b", "dp", "lt", "sf", "d", "dk", "p", "ltg", "g", "dkg"] as const;
+export type Tone = typeof tones[number];
 
-const regexp = new RegExp(`^(${tones.join('|')})(${hueNumbers.join('|')})$`);
+const hueNumbers = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24] as const;
+export type HueNumber = typeof hueNumbers[number];
+
+const chromaticColorRegExp = new RegExp(`^(${tones.join('|')})(${hueNumbers.join('|')})$`);
 const pccsCodeToColor = new Map<string, PccsColor>(
-    allColors.map(color => ({ color, match: regexp.exec(color.pccsCode) }))
-        .filter(x => x.match != null) // except W, Gy, B
-        .map(x => [x.match![1] + x.match![2], x.color])
+    allColors.filter(x => chromaticColorRegExp.test(x.pccsCode)) // except W, Gy, B
+        .map(x => [x.pccsCode, x])
 );
 
-export type Tone = "v" | "b" | "dp" | "lt" | "sf" | "d" | "dk" | "p" | "ltg" | "g" | "dkg";
-export type HueNumber = 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24;
-
 export const Pccs = {
-    get colors(): ReadonlyArray<Readonly<PccsColor>> {
+    get colors() {
         return allColors;
     },
-    get tones(): ReadonlyArray<Tone> {
+    get tones() {
         return tones;
     },
-    get hueNumbers(): ReadonlyArray<HueNumber> {
+    get hueNumbers() {
         return hueNumbers;
     },
     complex(h: HueNumber) {
@@ -237,13 +197,9 @@ export const Pccs = {
         return c;
     },
     deconstruct(pccsCode: string) {
-        const match = regexp.exec(pccsCode);
-        if (match == null) return undefined;
-        return { tone: match[1], hueNumber: Number(match[2]) };
+        const match = chromaticColorRegExp.exec(pccsCode);
+        if (match == null) throw Error(`${pccsCode} is invalid.`);
+        return { tone: match[1] as Tone, hueNumber: Number(match[2]) as HueNumber };
     },
 };
 
-export interface PccsColor {
-    pccsCode: string;
-    hexCode: string;
-}

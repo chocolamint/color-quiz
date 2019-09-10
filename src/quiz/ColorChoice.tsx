@@ -1,5 +1,4 @@
 import React from 'react';
-import { blackOrWhite } from '../Utils';
 import { QuizComponentProps, QuizStatus, ColorChoiceQuiz, drawBackground } from './Quiz';
 
 interface ColorChoiceProps extends QuizComponentProps {

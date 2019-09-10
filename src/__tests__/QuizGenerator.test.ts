@@ -53,8 +53,8 @@ describe("createQuizGenerator", () => {
         const quiz = generator("ColorSchemeQuiz");
 
         for (const [index, [a, b]] of quiz.choices.entries()) {
-            const ha = Pccs.deconstruct(a.pccsCode)!;
-            const hb = Pccs.deconstruct(b.pccsCode)!;
+            const ha = Pccs.deconstruct(a.pccsCode);
+            const hb = Pccs.deconstruct(b.pccsCode);
             const hueDiff = Math.abs(ha.hueNumber - hb.hueNumber);
             if (index === quiz.answer) {
                 expect(hueDiff).toBe(12);
