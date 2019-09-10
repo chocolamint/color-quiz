@@ -2,7 +2,7 @@ import { Random, shuffle as utilShuffle, range } from "../Utils";
 import { Pccs, HueNumber } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, ColorChoiceQuizSubType, Quiz } from "./Quiz";
 
-export type QuizGenerator = () => Quiz;
+export type QuizGenerator = (type?: Quiz["type"]) => Quiz;
 
 export function createQuizGenerator(random: Random): QuizGenerator {
 
@@ -71,8 +71,23 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         generateXadsQuiz
     ];
 
-    return function (): Quiz {
-        const generateQuiz = sample(generators);
+    const selectGenerator = (type?: Quiz["type"]): () => Quiz => {
+        if (type === undefined) {
+            return sample(generators);
+        } else {
+            switch (type) {
+                case "ColorChoiceQuiz":
+                    return generateColorChoiceQuiz;
+                case "ColorSchemeQuiz":
+                    return generateXadsQuiz;
+                default:
+                    return type; // never
+            }
+        }
+    }
+
+    return function (type?: Quiz["type"]): Quiz {
+        const generateQuiz = selectGenerator(type);
         return generateQuiz();
     };
 }
