@@ -1,4 +1,4 @@
-import { Random, shuffle as utilShuffle } from "../Utils";
+import { Random, shuffle as utilShuffle, range } from "../Utils";
 import { Pccs, HueNumber } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, ColorChoiceQuizSubType, Quiz } from "./Quiz";
 
@@ -53,7 +53,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         const answerPair = [answerHue, complexHue].map(toSomeColor);
         const answer = randomAnswer();
         const choices = insertAt(
-            [...Array(3)].map((_, i) => i).map(x => randomColors()),
+            range(0, 3).map(_ => randomColors()),
             answer, answerPair
         );
 
