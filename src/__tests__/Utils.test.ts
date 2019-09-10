@@ -1,4 +1,4 @@
-import { shuffle, Random } from "./Utils";
+import { shuffle, Random } from "../Utils";
 
 describe("shuffle", () => {
 
