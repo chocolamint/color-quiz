@@ -16,7 +16,7 @@ export class Random {
     }
 
     // XorShift
-    next() {
+    private nextDouble() {
         let t;
 
         t = this.x ^ (this.x << 11);
@@ -24,8 +24,8 @@ export class Random {
         return this.w = (this.w ^ (this.w >>> 19)) ^ (t ^ (t >>> 8));
     }
 
-    nextInt(max: number) {
-        const r = Math.abs(this.next());
+    public next(max: number) {
+        const r = Math.abs(this.nextDouble());
         return r % max;
     }
 }
@@ -33,7 +33,7 @@ export class Random {
 export function shuffle<T>(array: ReadonlyArray<T>, random: Random): T[] {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = random.nextInt(i + 1);
+        const j = random.next(i + 1);
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;

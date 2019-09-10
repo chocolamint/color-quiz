@@ -7,13 +7,13 @@ export type QuizGenerator = () => Quiz;
 export function createQuizGenerator(random: Random): QuizGenerator {
 
     function sample<T>(array: ReadonlyArray<T>) {
-        return array[random.nextInt(array.length)];
+        return array[random.next(array.length)];
     }
     function shuffle<T>(array: ReadonlyArray<T>) {
         return utilShuffle(array, random);
     }
     function randomAnswer() {
-        return random.nextInt(4) as 0 | 1 | 2 | 3;
+        return random.next(4) as 0 | 1 | 2 | 3;
     }
     function insertAt<T>(array: ReadonlyArray<T>, index: number, item: T) {
         const copy = array.slice();
