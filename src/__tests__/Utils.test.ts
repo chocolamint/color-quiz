@@ -1,4 +1,4 @@
-import { shuffle, Random } from "../Utils";
+import { shuffle, Random, blackOrWhite } from "../Utils";
 
 describe("Random", () => {
 
@@ -50,5 +50,23 @@ describe("shuffle", () => {
     ])("shuffle array (seed: %i)", (seed, expected) => {
         const actual = shuffle(array, new Random(seed as number));
         expect(actual).toEqual(expected);
+    });
+});
+
+describe("blackOrWhite", () => {
+
+    test.each([
+        ["#ffffff", "black"],
+        ["#000000", "white"],
+        ["#999999", "black"],
+        ["#4A4A4A", "white"],
+        ["#4C6068", "white"],
+        ["#AE6F85", "black"],
+        ["#717D00", "white"],
+        ["#9C5DA0", "white"],
+        ["#AE6F85", "black"],
+    ])("returns sufficient contrast color", (color, expected) => {
+        const actual = blackOrWhite(color);
+        expect(actual).toBe(expected);
     });
 });
