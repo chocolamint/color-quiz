@@ -1,9 +1,7 @@
-import { ColorSchemeQuiz } from "./ColorScheme";
-import { ColorChoiceQuiz, ColorChoiceQuizSubType } from "./ColorChoice";
 import { Random, shuffle as utilShuffle } from "../Utils";
 import { hues, tones, colors } from "./colors";
+import { ColorSchemeQuiz, ColorChoiceQuiz, ColorChoiceQuizSubType, Quiz } from "./Quiz";
 
-export type Quiz = ColorSchemeQuiz | ColorChoiceQuiz;
 export type QuizGenerator = () => Quiz;
 
 export function createQuizGenerator(random: Random): QuizGenerator {

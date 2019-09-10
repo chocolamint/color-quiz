@@ -1,16 +1,7 @@
 import React from 'react';
 import { Color } from './colors';
 import { blackOrWhite } from '../Utils';
-import { QuizComponentProps, QuizStatus } from './Quiz';
-
-export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
-export interface ColorChoiceQuiz {
-    type: "ColorChoiceQuiz";
-    subType: ColorChoiceQuizSubType;
-    question: string;
-    choices: Color[];
-    answer: Color;
-}
+import { QuizComponentProps, QuizStatus, ColorChoiceQuiz } from './Quiz';
 
 interface ColorChoiceProps extends QuizComponentProps {
     quiz: ColorChoiceQuiz;

@@ -3,8 +3,8 @@ import './App.css';
 import { Random } from './Utils';
 import ColorChoice from './quiz/ColorChoice';
 import ColorScheme from './quiz/ColorScheme';
-import { QuizStatus } from './quiz/Quiz';
-import { createQuizGenerator, Quiz, QuizGenerator } from './quiz/QuizGenerator';
+import { QuizStatus, Quiz } from './quiz/Quiz';
+import { createQuizGenerator, QuizGenerator } from './quiz/QuizGenerator';
 
 
 interface AppState {
