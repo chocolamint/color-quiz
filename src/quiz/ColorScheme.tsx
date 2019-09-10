@@ -5,14 +5,16 @@ import { QuizComponentProps, QuizStatus } from "./Quiz";
 
 export type ColorSchemeQuizSubType = "Dyads";
 export interface ColorSchemeQuiz {
-    type: "ColorSchemeQuiz",
-    subType: ColorSchemeQuizSubType,
+    type: "ColorSchemeQuiz";
+    subType: ColorSchemeQuizSubType;
+    question: string;
     choices: { key: string, colors: Color[] }[];
     answer: string;
 }
 
 interface ColorSchemeProps extends QuizComponentProps {
     quiz: ColorSchemeQuiz;
+    message: string;
 }
 
 export default class ColorScheme extends React.Component<ColorSchemeProps> {
@@ -29,6 +31,7 @@ export default class ColorScheme extends React.Component<ColorSchemeProps> {
             <div className="which-dyads">
                 <div className="question">
                     <div className="message">
+                        {this.props.quiz.question}<br />
                         {this.props.message}
                     </div>
                 </div>

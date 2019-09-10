@@ -5,14 +5,16 @@ import { QuizComponentProps, QuizStatus } from './Quiz';
 
 export type ColorChoiceQuizSubType = "ColorChoice" | "CodeChoice";
 export interface ColorChoiceQuiz {
-    type: "ColorChoiceQuiz",
-    subType: ColorChoiceQuizSubType,
+    type: "ColorChoiceQuiz";
+    subType: ColorChoiceQuizSubType;
+    question: string;
     choices: Color[];
     answer: Color;
 }
 
 interface ColorChoiceProps extends QuizComponentProps {
     quiz: ColorChoiceQuiz;
+    message: string;
 }
 
 export default class ColorChoice extends React.Component<ColorChoiceProps> {
@@ -34,6 +36,7 @@ export default class ColorChoice extends React.Component<ColorChoiceProps> {
                         {quiz.subType === "CodeChoice" && status === QuizStatus.Thinking ? "" : quiz.answer.code}
                     </div>
                     <div className="message">
+                        {quiz.question}<br />
                         {this.props.message}
                     </div>
                 </div>

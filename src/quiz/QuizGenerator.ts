@@ -4,7 +4,7 @@ import { Random, shuffle as utilShuffle } from "../Utils";
 import { hues, tones, colors } from "./colors";
 
 export type Quiz = ColorSchemeQuiz | ColorChoiceQuiz;
-export type QuizGenerator = () => { question: string; quiz: Quiz };
+export type QuizGenerator = () => Quiz;
 
 export function createQuizGenerator(random: Random): QuizGenerator {
 
@@ -15,7 +15,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         return utilShuffle(array, random);
     }
 
-    function generateColorChoiceQuiz(): { quiz: ColorChoiceQuiz, question: string } {
+    function generateColorChoiceQuiz(): ColorChoiceQuiz {
         const subTypes: ColorChoiceQuizSubType[] = ["ColorChoice", "CodeChoice"];
         const subType = sample(subTypes);
         const question = subType === "ColorChoice" ? "このコードはどの色？" : "この色はどれ？";
@@ -23,16 +23,14 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         const answer = sample(choices);
 
         return {
+            type: "ColorChoiceQuiz",
+            subType,
             question,
-            quiz: {
-                type: "ColorChoiceQuiz",
-                subType,
-                choices: shuffle(choices),
-                answer: answer
-            },
+            choices: shuffle(choices),
+            answer: answer
         };
     }
-    function generateXadsQuiz(): { quiz: ColorSchemeQuiz, question: string } {
+    function generateXadsQuiz(): ColorSchemeQuiz {
         const answerHue = sample(hues);
         const getComplexHue = (h: number) => h > 12 ? h - 12 : h + 12
         const complexHue = getComplexHue(answerHue);
@@ -57,13 +55,11 @@ export function createQuizGenerator(random: Random): QuizGenerator {
             .concat(answer);
 
         return {
+            type: "ColorSchemeQuiz",
+            subType: "Dyads",
             question: "ダイアード配色はどれ？",
-            quiz: {
-                type: "ColorSchemeQuiz",
-                subType: "Dyads",
-                choices: shuffle(choices),
-                answer: "answer"
-            },
+            choices: shuffle(choices),
+            answer: "answer"
         };
     }
 
@@ -72,8 +68,8 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         generateXadsQuiz
     ];
 
-    return function (): { quiz: Quiz, question: string } {
-        const generator = sample(generators);
-        return generator();
+    return function (): Quiz {
+        const generateQuiz = sample(generators);
+        return generateQuiz();
     };
 }

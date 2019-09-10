@@ -23,10 +23,10 @@ export default class App extends React.Component<{}, AppState> {
     super(props);
 
     this.generateQuiz = createQuizGenerator(new Random());
-    const { quiz, question } = this.generateQuiz();
+    const quiz = this.generateQuiz();
     this.state = {
       quiz,
-      message: question,
+      message: "",
       quizStatus: QuizStatus.Thinking,
       quizCount: 0,
       correctCount: 0
@@ -64,10 +64,10 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   private nextQuiz() {
-    const { quiz, question } = this.generateQuiz();
+    const quiz = this.generateQuiz();
     this.setState({
       quiz,
-      message: question,
+      message: "",
       quizStatus: QuizStatus.Thinking,
       quizCount: this.state.quizCount + 1,
       correctCount: this.state.correctCount + (this.state.quizStatus === QuizStatus.Correct ? 1 : 0)
