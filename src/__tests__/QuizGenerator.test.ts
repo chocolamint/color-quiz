@@ -1,6 +1,7 @@
 import { Random, range } from "../Utils";
 import { createQuizGenerator } from "../quiz/QuizGenerator";
 import { Pccs } from "../quiz/PccsColors";
+import { exec } from "child_process";
 
 describe("createQuizGenerator", () => {
 
@@ -59,6 +60,19 @@ describe("createQuizGenerator", () => {
             } else {
                 expect(hueDiff).not.toBe(12);
             }
+        }
+    });
+
+    test.each(range(0, 200))("pair color is different color (seed: %i)", (seed: number) => {
+
+        const random = new Random(seed);
+        const generator = createQuizGenerator(random);
+
+        const quiz = generator("ColorSchemeQuiz");
+
+        for (const choice of quiz.choices) {
+            const distinct = new Set(choice.map(x => x.pccsCode));
+            expect(distinct.size).toEqual(choice.length);
         }
     });
 });
