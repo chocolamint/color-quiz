@@ -61,7 +61,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
             type: "ColorSchemeQuiz",
             subType: "Dyads",
             question: "ダイアード配色はどれ？",
-            choices: shuffle(choices),
+            choices: choices,
             answer: answer
         };
     }
