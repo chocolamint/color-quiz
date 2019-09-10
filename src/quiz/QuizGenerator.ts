@@ -30,18 +30,16 @@ export function createQuizGenerator(random: Random): QuizGenerator {
     }
     function generateXadsQuiz(): ColorSchemeQuiz {
         const answerHue = sample(Pccs.hueNumbers);
-        const getComplexHue = (h: HueNumber) => (h > 12 ? h - 12 : h + 12) as HueNumber;
-        const complexHue = getComplexHue(answerHue);
+        const complexHue = Pccs.complex(answerHue);
         const toSomeColor = (h: HueNumber) => Pccs.find(sample(Pccs.tones), h);
         const randomColors = () => {
             while (true) {
-                const hue = sample(Pccs.hueNumbers);
-                const c = getComplexHue(hue);
-                const pair = sample(Pccs.hueNumbers.filter(x => x !== c));
-                const result = [hue, pair].map(toSomeColor);
+                const hue1 = sample(Pccs.hueNumbers);
+                const hue2 = sample(Pccs.hueNumbers.filter(x => x !== Pccs.complex(hue1)));
+                const pair = [hue1, hue2].map(toSomeColor);
                 // 偶然同じ色になってしまったらもう1回
-                if (result[0].pccsCode === result[1].pccsCode) continue;
-                return result;
+                if (pair[0].pccsCode === pair[1].pccsCode) continue;
+                return pair;
             }
         };
         const answer = { key: "answer", colors: [answerHue, complexHue].map(toSomeColor) };

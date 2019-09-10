@@ -228,6 +228,9 @@ export const Pccs = {
     get hueNumbers(): ReadonlyArray<HueNumber> {
         return hueNumbers;
     },
+    complex(h: HueNumber) {
+        return (h > 12 ? h - 12 : h + 12) as HueNumber
+    },
     find(tone: Tone, hueNumber: HueNumber) {
         const c = pccsCodeToColor.get(tone + hueNumber);
         if (c == null) throw Error(`${tone}${hueNumber} not found.`);
