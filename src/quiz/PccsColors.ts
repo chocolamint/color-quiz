@@ -172,11 +172,10 @@ export type Tone = typeof tones[number];
 const hueNumbers = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24] as const;
 export type HueNumber = typeof hueNumbers[number];
 
-const regexp = new RegExp(`^(${tones.join('|')})(${hueNumbers.join('|')})$`);
+const chromaticColorRegExp = new RegExp(`^(${tones.join('|')})(${hueNumbers.join('|')})$`);
 const pccsCodeToColor = new Map<string, PccsColor>(
-    allColors.map(color => ({ color, match: regexp.exec(color.pccsCode) }))
-        .filter(x => x.match != null) // except W, Gy, B
-        .map(x => [x.match![1] + x.match![2], x.color])
+    allColors.filter(x => chromaticColorRegExp.test(x.pccsCode)) // except W, Gy, B
+        .map(x => [x.pccsCode, x])
 );
 
 export const Pccs = {
@@ -198,9 +197,9 @@ export const Pccs = {
         return c;
     },
     deconstruct(pccsCode: string) {
-        const match = regexp.exec(pccsCode);
+        const match = chromaticColorRegExp.exec(pccsCode);
         if (match == null) throw Error(`${pccsCode} is invalid.`);
-        return { tone: match[1], hueNumber: Number(match[2]) };
+        return { tone: match[1] as Tone, hueNumber: Number(match[2]) as HueNumber };
     },
 };
 
