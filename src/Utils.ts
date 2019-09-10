@@ -39,6 +39,28 @@ export function shuffle<T>(array: ReadonlyArray<T>, random: Random): T[] {
     return shuffled;
 }
 
+export function isUnique<T, U>(array: ReadonlyArray<T>, keySelector: (item: T) => U) {
+    return new Set<U>(array.map(keySelector)).size === array.length;
+}
+
+export function combination<T>(xs: ReadonlyArray<T>, k: number): T[][] {
+
+    const temp = (xs: ReadonlyArray<T>, i: number, k: number): T[][] => {
+        if (k === 0) {
+            return xs.slice(i).map(x => [x]);
+        }
+        const ret = [];
+        for (let j = i; j < xs.length; j++) {
+            const ys = temp(xs, j + 1, k - 1);
+            for (const y of ys) {
+                ret.push([xs[j]].concat(y));
+            }
+        }
+        return ret;
+    };
+    return temp(xs, 0, k - 1);
+}
+
 // https://lab.syncer.jp/Web/JavaScript/Snippet/55/
 export function blackOrWhite(hexcolor: string): "white" | "black" {
     var r = parseInt(hexcolor.substr(1, 2), 16);

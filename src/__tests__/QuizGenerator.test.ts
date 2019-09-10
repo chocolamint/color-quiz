@@ -1,4 +1,4 @@
-import { Random, range } from "../Utils";
+import { Random, range, combination } from "../Utils";
 import { createQuizGenerator } from "../quiz/QuizGenerator";
 import { Pccs } from "../quiz/PccsColors";
 import { exec } from "child_process";
@@ -52,14 +52,16 @@ describe("createQuizGenerator", () => {
 
         const quiz = generator("ColorSchemeQuiz");
 
-        for (const [index, [a, b]] of quiz.choices.entries()) {
-            const ha = Pccs.deconstruct(a.pccsCode);
-            const hb = Pccs.deconstruct(b.pccsCode);
-            const hueDiff = Math.abs(ha.hueNumber - hb.hueNumber);
+        for (const [index, colors] of quiz.choices.entries()) {
+            const hues = colors.map(x => Pccs.deconstruct(x.pccsCode).hueNumber);
+            const hueDiffs = combination(hues, 2).map(x => Math.abs(x[0] - x[1]));
+            const xadsDiff = quiz.subType === "Dyads" ? 12 : 8;
             if (index === quiz.answer) {
-                expect(hueDiff).toBe(12);
+                // 全部が xadsDiff 間隔
+                expect(hueDiffs.every(x => x === xadsDiff));
             } else {
-                expect(hueDiff).not.toBe(12);
+                // 最低1つが xadsDiff 間隔ではない
+                expect(hueDiffs.some(x => x !== xadsDiff));
             }
         }
     });

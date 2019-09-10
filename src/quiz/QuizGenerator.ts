@@ -1,4 +1,4 @@
-import { Random, shuffle as utilShuffle, range } from "../Utils";
+import { Random, shuffle as utilShuffle, range, isUnique } from "../Utils";
 import { Pccs, HueNumber } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, Quiz } from "./Quiz";
 
@@ -39,38 +39,45 @@ export function createQuizGenerator(random: Random): QuizGenerator {
         };
     }
     function generateXadsQuiz(): ColorSchemeQuiz {
+        const n = random.next(2) + 2 as 2 | 3;
         const answerHue = sample(Pccs.hueNumbers);
-        const complexHue = Pccs.complex(answerHue);
-        const toSomeColor = (h: HueNumber) => Pccs.find(sample(Pccs.tones), h);
-        const randomColors = () => {
-            while (true) {
-                const hue1 = sample(Pccs.hueNumbers);
-                const hue2 = sample(Pccs.hueNumbers.filter(x => x !== Pccs.complex(hue1)));
-                const pair = [hue1, hue2].map(toSomeColor);
-                // 偶然同じ色になってしまったらもう1回
-                if (pair[0].pccsCode === pair[1].pccsCode) continue;
-                return pair;
-            }
-        };
-        const answerPair = [answerHue, complexHue].map(toSomeColor);
-        const answer = randomAnswer();
-        const choices = insertAt(
-            range(0, 3).map(_ => randomColors()),
-            answer, answerPair
-        );
+        const answerTuple = [answerHue, ...Pccs.xads(answerHue, n)].map(toSomeColor);
+        const answerIndex = randomAnswer();
+        const choices = insertAt(range(0, 3).map(_ => randomColors(n)), answerIndex, answerTuple);
 
         // 偶然同じ色の組み合わせが複数できてしまったらもう1回
-        if (new Set(choices.map(x => x.map(y => y.pccsCode).sort().join(","))).size !== 4) {
+        if (!isUnique(choices, c => c.map(x => x.pccsCode).sort().join(','))) {
             return generateXadsQuiz();
         }
 
         return {
             type: "ColorSchemeQuiz",
-            subType: "Dyads",
-            question: "ダイアード配色はどれ？",
+            subType: n === 2 ? "Dyads" : "Triads",
+            question: `${n === 2 ? "ダイアード" : "トライアド"}配色はどれ？`,
             choices: choices,
-            answer: answer
+            answer: answerIndex
         };
+
+        function toSomeColor(h: HueNumber) {
+            return Pccs.find(sample(Pccs.tones), h);
+        }
+        function randomColors(n: 2 | 3) {
+            while (true) {
+                const hues = [sample(Pccs.hueNumbers)];
+                const noSelect = Pccs.xads(hues[0], n);
+                hues.push(sample(Pccs.hueNumbers.filter(x => !noSelect.includes(x))));
+                if (n > 2) {
+                    // eslint-disable-next-line
+                    for (const _ of range(0, n - 2)) {
+                        hues.push(sample(Pccs.hueNumbers));
+                    }
+                }
+                const pair = hues.map(toSomeColor);
+                // 偶然同じ色になってしまったらもう1回
+                if (!isUnique(pair, x => x.pccsCode)) continue;
+                return pair;
+            }
+        }
     }
 
     const generators = [
