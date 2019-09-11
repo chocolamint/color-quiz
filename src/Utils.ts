@@ -30,7 +30,7 @@ export class Random {
     }
 }
 
-export function shuffle<T>(array: ReadonlyArray<T>, random: Random): T[] {
+export function shuffle<T>(array: readonly T[], random: Random): T[] {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = random.next(i + 1);
@@ -39,13 +39,13 @@ export function shuffle<T>(array: ReadonlyArray<T>, random: Random): T[] {
     return shuffled;
 }
 
-export function isUnique<T, U>(array: ReadonlyArray<T>, keySelector: (item: T) => U) {
+export function isUnique<T, U>(array: readonly T[], keySelector: (item: T) => U) {
     return new Set<U>(array.map(keySelector)).size === array.length;
 }
 
-export function combination<T>(xs: ReadonlyArray<T>, k: number): T[][] {
+export function combination<T>(xs: readonly T[], k: number): T[][] {
 
-    const temp = (xs: ReadonlyArray<T>, i: number, k: number): T[][] => {
+    const temp = (xs: readonly T[], i: number, k: number): T[][] => {
         if (k === 0) {
             return xs.slice(i).map(x => [x]);
         }
