@@ -18,7 +18,7 @@ export default function App() {
     <div className="App">
       <header className="header">
         色彩クイズ
-        </header>
+      </header>
       <main className="main">
         {(() => {
           switch (quiz.type) {
