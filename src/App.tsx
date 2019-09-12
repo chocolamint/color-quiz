@@ -3,17 +3,8 @@ import './App.css';
 import { Random } from './Utils';
 import ColorChoice from './quiz/ColorChoice';
 import ColorScheme from './quiz/ColorScheme';
-import { QuizStatus, Quiz } from './quiz/Quiz';
-import { createQuizGenerator, QuizGenerator } from './quiz/QuizGenerator';
-
-
-interface AppState {
-  quiz: Quiz;
-  message: string;
-  quizStatus: QuizStatus;
-  quizCount: number;
-  correctCount: number;
-}
+import { QuizStatus } from './quiz/Quiz';
+import { createQuizGenerator } from './quiz/QuizGenerator';
 
 export default function App() {
 
