@@ -1,4 +1,4 @@
-import { Random, shuffle as utilShuffle, range, isUnique } from "../Utils";
+import { Random, shuffle as utilShuffle, range, isUnique, assertNever } from "../Utils";
 import { Pccs, HueNumber } from "./PccsColors";
 import { ColorSchemeQuiz, ColorChoiceQuiz, Quiz } from "./Quiz";
 
@@ -86,17 +86,15 @@ export function createQuizGenerator(random: Random): QuizGenerator {
     ];
 
     const selectGenerator = (type?: QuizType): () => Quiz => {
-        if (type === undefined) {
-            return sample(generators);
-        } else {
-            switch (type) {
-                case "ColorChoiceQuiz":
-                    return generateColorChoiceQuiz;
-                case "ColorSchemeQuiz":
-                    return generateXadsQuiz;
-                default:
-                    return type; // never
-            }
+        switch (type) {
+            case undefined:
+                return sample(generators);
+            case "ColorChoiceQuiz":
+                return generateColorChoiceQuiz;
+            case "ColorSchemeQuiz":
+                return generateXadsQuiz;
+            default:
+                return assertNever(type); // never
         }
     }
 
