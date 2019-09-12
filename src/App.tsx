@@ -34,6 +34,8 @@ export default function App() {
               return <ColorChoice quiz={quiz} message={message} quizStatus={quizStatus} onAnswer={e => handleAnswer(e)} />
             case "ColorSchemeQuiz":
               return <ColorScheme quiz={quiz} message={message} quizStatus={quizStatus} onAnswer={e => handleAnswer(e)} />
+            default:
+              return assertNever(quiz);
           }
         })()}
       </main>
