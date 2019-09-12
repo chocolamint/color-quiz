@@ -54,16 +54,16 @@ export default function App() {
   function nextQuiz() {
     setQuiz(generateQuiz());
     setMessage("");
-    setCount({
-      quiz: count.quiz + 1,
-      correct: count.correct + (quizStatus === QuizStatus.Correct ? 1 : 0)
-    });
     setQuizStatus(QuizStatus.Thinking);
   }
 
   function handleAnswer(correct: boolean) {
     setMessage(correct ? "🎉正解！🎉" : "残念...😢");
     setQuizStatus(correct ? QuizStatus.Correct : QuizStatus.Incorrect);
+    setCount({
+      quiz: count.quiz + 1,
+      correct: count.correct + (correct ? 1 : 0)
+    });
   }
 
   function handleNextQuizButton() {
