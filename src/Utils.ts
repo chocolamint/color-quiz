@@ -73,3 +73,7 @@ export function blackOrWhite(hexcolor: string): "white" | "black" {
 export function range(start: number, count: number): number[] {
     return [...Array(count)].map((_, i) => i + start);
 }
+
+export function assertNever(arg: never): never {
+    throw new Error();
+}

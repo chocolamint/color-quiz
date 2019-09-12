@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Random } from './Utils';
+import { Random, assertNever } from './Utils';
 import ColorChoice from './quiz/ColorChoice';
 import ColorScheme from './quiz/ColorScheme';
 import { QuizStatus } from './quiz/Quiz';
@@ -10,9 +10,17 @@ export default function App() {
 
   const generateQuiz = createQuizGenerator(new Random());
   const [quiz, setQuiz] = useState(generateQuiz());
-  const [message, setMessage] = useState("");
   const [quizStatus, setQuizStatus] = useState(QuizStatus.Thinking);
   const [count, setCount] = useState({ quiz: 0, correct: 0 });
+
+  const message = (() => {
+    switch (quizStatus) {
+      case QuizStatus.Correct: return "🎉正解！🎉";
+      case QuizStatus.Incorrect: return "残念...😢";
+      case QuizStatus.Thinking: return "";
+      default: return assertNever(quizStatus);
+    }
+  })();
 
   return (
     <div className="App">
@@ -44,12 +52,10 @@ export default function App() {
 
   function nextQuiz() {
     setQuiz(generateQuiz());
-    setMessage("");
     setQuizStatus(QuizStatus.Thinking);
   }
 
   function handleAnswer(correct: boolean) {
-    setMessage(correct ? "🎉正解！🎉" : "残念...😢");
     setQuizStatus(correct ? QuizStatus.Correct : QuizStatus.Incorrect);
     setCount({
       quiz: count.quiz + 1,
