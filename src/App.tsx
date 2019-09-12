@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { Random } from './Utils';
 import ColorChoice from './quiz/ColorChoice';
@@ -15,75 +15,59 @@ interface AppState {
   correctCount: number;
 }
 
-export default class App extends React.Component<{}, AppState> {
+export default function App() {
 
-  private generateQuiz: QuizGenerator;
+  const generateQuiz = createQuizGenerator(new Random());
+  const [quiz, setQuiz] = useState(generateQuiz());
+  const [message, setMessage] = useState("");
+  const [quizStatus, setQuizStatus] = useState(QuizStatus.Thinking);
+  const [count, setCount] = useState({ quiz: 0, correct: 0 });
 
-  public constructor(props: {}) {
-    super(props);
-
-    this.generateQuiz = createQuizGenerator(new Random());
-    const quiz = this.generateQuiz();
-    this.state = {
-      quiz,
-      message: "",
-      quizStatus: QuizStatus.Thinking,
-      quizCount: 0,
-      correctCount: 0
-    };
-  }
-
-  public render() {
-    return (
-      <div className="App">
-        <header className="header">
-          色彩クイズ
+  return (
+    <div className="App">
+      <header className="header">
+        色彩クイズ
         </header>
-        <main className="main">
-          {(() => {
-            switch (this.state.quiz.type) {
-              case "ColorChoiceQuiz":
-                return <ColorChoice quiz={this.state.quiz} message={this.state.message} quizStatus={this.state.quizStatus} onAnswer={e => this.handleAnswer(e)} />
-              case "ColorSchemeQuiz":
-                return <ColorScheme quiz={this.state.quiz} message={this.state.message} quizStatus={this.state.quizStatus} onAnswer={e => this.handleAnswer(e)} />
-            }
-          })()}
-        </main>
-        <footer className="footer">
-          <div className="control-buttons">
-            <button className="next-quiz-button" disabled={this.state.quizStatus === QuizStatus.Thinking} onClick={() => this.handleNextQuizButton()}>
-              次のクイズへ
+      <main className="main">
+        {(() => {
+          switch (quiz.type) {
+            case "ColorChoiceQuiz":
+              return <ColorChoice quiz={quiz} message={message} quizStatus={quizStatus} onAnswer={e => handleAnswer(e)} />
+            case "ColorSchemeQuiz":
+              return <ColorScheme quiz={quiz} message={message} quizStatus={quizStatus} onAnswer={e => handleAnswer(e)} />
+          }
+        })()}
+      </main>
+      <footer className="footer">
+        <div className="control-buttons">
+          <button className="next-quiz-button" disabled={quizStatus === QuizStatus.Thinking} onClick={() => handleNextQuizButton()}>
+            次のクイズへ
           </button>
-          </div>
-          <div className="status">
-            正解数: {this.state.correctCount} / {this.state.quizCount}
-          </div>
-        </footer>
-      </div>
-    );
-  }
+        </div>
+        <div className="status">
+          正解数: {count.correct} / {count.quiz}
+        </div>
+      </footer>
+    </div >
+  );
 
-  private nextQuiz() {
-    const quiz = this.generateQuiz();
-    this.setState({
-      quiz,
-      message: "",
-      quizStatus: QuizStatus.Thinking,
-      quizCount: this.state.quizCount + 1,
-      correctCount: this.state.correctCount + (this.state.quizStatus === QuizStatus.Correct ? 1 : 0)
+  function nextQuiz() {
+    setQuiz(generateQuiz());
+    setMessage("");
+    setCount({
+      quiz: count.quiz + 1,
+      correct: count.correct + (quizStatus === QuizStatus.Correct ? 1 : 0)
     });
+    setQuizStatus(QuizStatus.Thinking);
   }
 
-  private handleAnswer(correct: boolean) {
-    this.setState({
-      message: correct ? "🎉正解！🎉" : "残念...😢",
-      quizStatus: correct ? QuizStatus.Correct : QuizStatus.Incorrect
-    });
+  function handleAnswer(correct: boolean) {
+    setMessage(correct ? "🎉正解！🎉" : "残念...😢");
+    setQuizStatus(correct ? QuizStatus.Correct : QuizStatus.Incorrect);
   }
 
-  private handleNextQuizButton() {
-
-    this.nextQuiz();
+  function handleNextQuizButton() {
+    nextQuiz();
   }
 }
 
