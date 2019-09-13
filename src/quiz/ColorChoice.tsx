@@ -1,12 +1,7 @@
 import React from 'react';
 import { QuizComponentProps, QuizStatus, ColorChoiceQuiz, drawBackground } from './Quiz';
 
-interface ColorChoiceProps extends QuizComponentProps {
-    quiz: ColorChoiceQuiz;
-    message: string;
-}
-
-export default function ColorChoice(props: ColorChoiceProps) {
+export default function ColorChoice(props: QuizComponentProps<ColorChoiceQuiz>) {
 
     const quiz = props.quiz;
     const status = props.quizStatus;

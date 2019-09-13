@@ -1,7 +1,8 @@
 import { PccsColor } from "./PccsColors";
 import { blackOrWhite } from "../Utils";
 
-export interface QuizComponentProps {
+export interface QuizComponentProps<T> {
+    quiz: T;
     message: string;
     quizStatus: QuizStatus;
     onAnswer: (correct: boolean) => void;
