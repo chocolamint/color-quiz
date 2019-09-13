@@ -34,7 +34,7 @@ export function createQuizGenerator(random: Random): QuizGenerator {
             type: "ColorChoiceQuiz",
             subType,
             question,
-            choices: shuffle(choices),
+            choices: choices,
             answer: answer
         };
     }
