@@ -1,12 +1,7 @@
 import React from "react";
-import { QuizComponentProps, QuizStatus, ColorSchemeQuiz, drawBackground } from "./Quiz";
+import { QuizStatus, drawBackground, QuizComponentProps, ColorChoiceQuiz, ColorSchemeQuiz } from "./Quiz";
 
-interface ColorSchemeProps extends QuizComponentProps {
-    quiz: ColorSchemeQuiz;
-    message: string;
-}
-
-export default function ColorScheme(props: ColorSchemeProps) {
+export default function ColorScheme(props: QuizComponentProps<ColorSchemeQuiz>) {
 
     const status = props.quizStatus;
     document.querySelector("button");
